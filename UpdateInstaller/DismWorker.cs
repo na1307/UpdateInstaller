@@ -3,14 +3,15 @@
 public sealed class DismWorker : UpdateWorker {
     private readonly ProcessStartInfo dismStartInfo = new() { FileName = "dism.exe", UseShellExecute = true, WindowStyle = ProcessWindowStyle.Hidden };
 
+    public DismWorker(IEnumerable<Update> updates) : base(updates) { }
     public DismWorker(IEnumerable<string> updates) : base(updates) { }
 
-    protected override int InstallSingle(string updateFile) {
+    protected override int InstallSingle(Update update) {
         // 임시 디렉토리 생성
-        var sandboxDirectory = Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("temp"), Path.GetFileNameWithoutExtension(updateFile)));
+        var sandboxDirectory = Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("temp"), update.Name));
 
         // Dism 매개 변수
-        dismStartInfo.Arguments = $"/online /add-package /packagepath:\"{updateFile}\" /scratchdir:\"{sandboxDirectory.FullName}\" /quiet /norestart";
+        dismStartInfo.Arguments = $"/online /add-package /packagepath:\"{update.UpdatePath}\" /scratchdir:\"{sandboxDirectory.FullName}\" /quiet /norestart";
 
         using Process dism = new() { StartInfo = dismStartInfo };
 

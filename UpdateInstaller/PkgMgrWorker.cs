@@ -3,14 +3,15 @@
 public sealed class PkgMgrWorker : UpdateWorker {
     private readonly ProcessStartInfo pkgMgrStartInfo = new() { FileName = "pkgmgr.exe", UseShellExecute = true, WindowStyle = ProcessWindowStyle.Hidden };
 
+    public PkgMgrWorker(IEnumerable<Update> updates) : base(updates) { }
     public PkgMgrWorker(IEnumerable<string> updates) : base(updates) { }
 
-    protected override int InstallSingle(string updateFile) {
+    protected override int InstallSingle(Update update) {
         // 임시 디렉토리 생성
-        var sandboxDirectory = Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("temp"), Path.GetFileNameWithoutExtension(updateFile)));
+        var sandboxDirectory = Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("temp"), update.Name));
 
         // PkgMgr 매개 변수
-        pkgMgrStartInfo.Arguments = $"/ip /m:\"{updateFile}\" /s:\"{sandboxDirectory.FullName}\" /quiet /norestart";
+        pkgMgrStartInfo.Arguments = $"/ip /m:\"{update.UpdatePath}\" /s:\"{sandboxDirectory.FullName}\" /quiet /norestart";
 
         using Process pkgMgr = new() { StartInfo = pkgMgrStartInfo };
 

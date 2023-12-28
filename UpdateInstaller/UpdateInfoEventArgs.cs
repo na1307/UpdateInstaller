@@ -1,11 +1,11 @@
 ﻿namespace UpdateInstaller;
 
 public sealed class UpdateInfoEventArgs : EventArgs {
-    public string Name { get; }
+    public Update Update { get; }
     public int Count { get; }
 
-    public UpdateInfoEventArgs(string name, int count) {
-        Name = name;
+    public UpdateInfoEventArgs(Update update, int count) {
+        Update = update;
         Count = count;
     }
 }

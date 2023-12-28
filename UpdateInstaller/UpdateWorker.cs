@@ -34,7 +34,7 @@ public abstract class UpdateWorker : IDisposable {
     /// </summary>
     public bool IsCompleted => !backgroundWorker.IsBusy;
 
-    protected UpdateWorker(IEnumerable<string> updates) {
+    protected UpdateWorker(IEnumerable<Update> updates) {
         backgroundWorker = new() {
             WorkerReportsProgress = true,
             WorkerSupportsCancellation = true,
@@ -42,6 +42,8 @@ public abstract class UpdateWorker : IDisposable {
         backgroundWorker.DoWork += install;
         backgroundWorker.RunWorkerAsync(updates);
     }
+
+    protected UpdateWorker(IEnumerable<string> updates) : this(updates.Select(u => new Update(u))) { }
 
     /// <summary>
     /// 작업을 중단함
@@ -67,25 +69,24 @@ public abstract class UpdateWorker : IDisposable {
     /// <summary>
     /// 업데이트 파일 하나를 설치함
     /// </summary>
-    /// <param name="updateFile">설치할 업데이트 파일의 전체 경로</param>
+    /// <param name="update">설치할 업데이트 파일의 전체 경로</param>
     /// <returns>작업의 결과</returns>
-    protected abstract int InstallSingle(string updateFile);
+    protected abstract int InstallSingle(Update update);
 
     private void install(object sender, DoWorkEventArgs e) {
         Thread.Sleep(500);
 
         List<string> failedList = [];
 
-        foreach (var updateFile in (IEnumerable<string>)e.Argument) {
+        foreach (var update in (IEnumerable<Update>)e.Argument) {
             if (backgroundWorker.CancellationPending) {
                 e.Cancel = true;
                 break;
             }
 
-            var updateName = Path.GetFileNameWithoutExtension(updateFile);
+            InstallStarted?.Invoke(this, new(update, ++progress));
 
-            InstallStarted?.Invoke(this, new(updateName, ++progress));
-            var result = InstallSingle(updateFile);
+            var result = InstallSingle(update);
 
             switch (result) {
                 case 0:
@@ -96,7 +97,7 @@ public abstract class UpdateWorker : IDisposable {
                     break;
 
                 default:
-                    failedList.Add(updateName);
+                    failedList.Add(update.Name);
                     break;
             }
 
