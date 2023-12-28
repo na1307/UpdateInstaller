@@ -1,0 +1,9 @@
+﻿namespace UpdateInstaller;
+
+public static class Constants {
+    public const ulong BuildNumber = 1;
+    public const string PkgMgr = "PkgMgr";
+    public const string Dism = "Dism";
+    public const string DismApi = "Dism API";
+    public static readonly string Arch = IntPtr.Size == 8 ? "x64" : "x86"; // 32비트 또는 64비트 감지
+}
