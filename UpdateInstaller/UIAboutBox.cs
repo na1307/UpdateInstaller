@@ -1,4 +1,4 @@
-﻿using static UpdateInstaller.Features.AssemblyProperties;
+﻿using static Bluehill.AssemblyProperties;
 
 namespace UpdateInstaller;
 
