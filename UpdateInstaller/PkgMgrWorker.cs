@@ -8,7 +8,7 @@ public sealed class PkgMgrWorker : UpdateWorker {
 
     protected override int InstallSingle(Update update) {
         // 임시 디렉토리 생성
-        var sandboxDirectory = Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("temp"), update.Name));
+        DirectoryInfo sandboxDirectory = Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("temp"), update.Name));
 
         // PkgMgr 매개 변수
         pkgMgrStartInfo.Arguments = $"/ip /m:\"{update.UpdatePath}\" /s:\"{sandboxDirectory.FullName}\" /quiet /norestart";

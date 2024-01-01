@@ -23,10 +23,10 @@ public sealed class Package {
             throw new LoadException("구성 파일을 찾을 수 없습니다.", ex);
         }
 
-        var packagenode = xml.SelectSingleNode("Package");
+        XmlNode packagenode = xml.SelectSingleNode("Package");
 
         // 필수 구성이 없으면 예외 던지기
-        var optitems = new[] { nameof(OSVersion), nameof(SPVersion), nameof(PackageVersion) }.Where(req => packagenode.SelectSingleNode(req) == null);
+        IEnumerable<string> optitems = new[] { nameof(OSVersion), nameof(SPVersion), nameof(PackageVersion) }.Where(req => packagenode.SelectSingleNode(req) == null);
         if (optitems.Any()) throw new LoadException($"구성 파일에 \"{optitems.First()}\" 항목이 없습니다.");
 
         OSVersion = packagenode.SelectSingleNode(nameof(OSVersion)).InnerText;

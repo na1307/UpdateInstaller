@@ -8,7 +8,7 @@ public sealed class DismWorker : UpdateWorker {
 
     protected override int InstallSingle(Update update) {
         // 임시 디렉토리 생성
-        var sandboxDirectory = Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("temp"), update.Name));
+        DirectoryInfo sandboxDirectory = Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("temp"), update.Name));
 
         // Dism 매개 변수
         dismStartInfo.Arguments = $"/online /add-package /packagepath:\"{update.UpdatePath}\" /scratchdir:\"{sandboxDirectory.FullName}\" /quiet /norestart";

@@ -78,7 +78,7 @@ public abstract class UpdateWorker : IDisposable {
 
         List<string> failedList = [];
 
-        foreach (var update in (IEnumerable<Update>)e.Argument) {
+        foreach (Update update in (IEnumerable<Update>)e.Argument) {
             if (backgroundWorker.CancellationPending) {
                 e.Cancel = true;
                 break;

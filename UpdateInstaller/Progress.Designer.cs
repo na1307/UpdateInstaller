@@ -63,7 +63,6 @@ partial class Progress : Form {
             // cancelButton
             // 
             this.cancelButton.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.cancelButton.Location = new System.Drawing.Point(90, 3);
             this.cancelButton.Name = "cancelButton";

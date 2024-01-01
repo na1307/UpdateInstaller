@@ -37,7 +37,6 @@ public sealed partial class Progress {
 
     private void okButton_Click(object sender, EventArgs e) => Close();
     private void cancelButton_Click(object sender, EventArgs e) => Close();
-
     private void linkedWorker_InstallStarted(object sender, UpdateInfoEventArgs e) => textBox1.AppendText($"{e.Update.Name} 설치 중(업데이트 {e.Count} / {progressBar1.Maximum})...");
 
     private void linkedWorker_InstallCompleted(object sender, ProgressChangedEventArgs e) {
