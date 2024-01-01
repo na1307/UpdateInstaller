@@ -1,48 +1,36 @@
 ﻿namespace UpdateInstaller;
 
 public sealed partial class Pre {
+    private readonly string preUpdatePath;
+    private readonly Dictionary<string, string[]> preUpdates;
+
     public Pre() {
         InitializeComponent();
         HideOKButton();
 
-        var temp1 = Package.Instance.GetPreUpdateDescription(1);
+        preUpdatePath = GetConfigValue("PreUpdatePath")!;
+        preUpdates = new() {
+            { GetConfigValue("PreUpdateDescription1") ?? "1", GetConfigValue("PreUpdate1")?.Split(',') ?? [] },
+            { GetConfigValue("PreUpdateDescription2") ?? "2", GetConfigValue("PreUpdate2")?.Split(',') ?? [] },
+            { GetConfigValue("PreUpdateDescription3") ?? "3", GetConfigValue("PreUpdate3")?.Split(',') ?? [] },
+            { GetConfigValue("PreUpdateDescription4") ?? "4", GetConfigValue("PreUpdate4")?.Split(',') ?? [] },
+            { GetConfigValue("PreUpdateDescription5") ?? "5", GetConfigValue("PreUpdate5")?.Split(',') ?? [] }
+        };
 
-        if (temp1 != "1") {
-            preEntry1.Text = temp1;
-        } else {
-            preEntry1.Visible = false;
-        }
+        setEntry(1, preEntry1);
+        setEntry(2, preEntry2);
+        setEntry(3, preEntry3);
+        setEntry(4, preEntry4);
+        setEntry(5, preEntry5);
 
-        var temp2 = Package.Instance.GetPreUpdateDescription(2);
+        void setEntry(int num, PreEntry entry) {
+            var description = preUpdates.ToArray()[num - 1].Key;
 
-        if (temp2 != "2") {
-            preEntry2.Text = temp2;
-        } else {
-            preEntry2.Visible = false;
-        }
-
-        var temp3 = Package.Instance.GetPreUpdateDescription(3);
-
-        if (temp3 != "3") {
-            preEntry3.Text = temp3;
-        } else {
-            preEntry3.Visible = false;
-        }
-
-        var temp4 = Package.Instance.GetPreUpdateDescription(4);
-
-        if (temp4 != "4") {
-            preEntry4.Text = temp4;
-        } else {
-            preEntry4.Visible = false;
-        }
-
-        var temp5 = Package.Instance.GetPreUpdateDescription(5);
-
-        if (temp5 != "5") {
-            preEntry5.Text = temp5;
-        } else {
-            preEntry5.Visible = false;
+            if (description != num.ToString()) {
+                entry.Text = description;
+            } else {
+                entry.Visible = false;
+            }
         }
     }
 
@@ -50,12 +38,14 @@ public sealed partial class Pre {
         OK_Button_Click(sender, e);
 
         new Progress((((PreEntry)sender).Name switch {
-            nameof(preEntry1) => Package.Instance.GetPreUpdate(1),
-            nameof(preEntry2) => Package.Instance.GetPreUpdate(2),
-            nameof(preEntry3) => Package.Instance.GetPreUpdate(3),
-            nameof(preEntry4) => Package.Instance.GetPreUpdate(4),
-            nameof(preEntry5) => Package.Instance.GetPreUpdate(5),
+            nameof(preEntry1) => getPreUpdate(1),
+            nameof(preEntry2) => getPreUpdate(2),
+            nameof(preEntry3) => getPreUpdate(3),
+            nameof(preEntry4) => getPreUpdate(4),
+            nameof(preEntry5) => getPreUpdate(5),
             _ => throw new InvalidOperationException(),
-        }).Select(u => Path.Combine(Package.Instance.GetUpdatePath(UpdatePathType.Pre) + "_" + Arch, u + ".cab"))).Show();
+        }).Select(u => Path.Combine(preUpdatePath + "_" + Arch, u + ".cab"))).Show();
+
+        string[]? getPreUpdate(int index) => preUpdates.ToArray()[index - 1].Value;
     }
 }

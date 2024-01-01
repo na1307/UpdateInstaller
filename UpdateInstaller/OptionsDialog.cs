@@ -6,7 +6,7 @@ public sealed partial class OptionsDialog {
     public OptionsDialog() {
         InitializeComponent();
         autoRestartBox.Checked = Default.AutoRestart;
-        dismButton.Enabled = Package.Instance.OSVersion != "6.0";
+        dismButton.Enabled = GetConfigValue(OSVersion) != "6.0";
         pkgmgrButton.Checked = Default.PackageProgram == "PkgMgr";
         dismButton.Checked = Default.PackageProgram == "Dism";
     }

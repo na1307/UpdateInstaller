@@ -1,31 +1,54 @@
 ﻿namespace UpdateInstaller;
 
 public partial class Choose {
+    private readonly string?[] updatePaths;
+    private readonly string? clientUpdatePath;
+    private readonly string? serverUpdatePath;
+    private readonly string?[] updatePathDescriptions;
+
     public Choose() {
         InitializeComponent();
-        radioButton1.Text = Package.Instance.GetUpdatePathDescription(1);
 
-        if (Package.Instance.GetUpdatePath(UpdatePathType.Path2) != null) {
-            radioButton2.Text = Package.Instance.GetUpdatePathDescription(2);
+        updatePaths = [
+            GetConfigValue("UpdatePath1"),
+            GetConfigValue("UpdatePath2"),
+            GetConfigValue("UpdatePath3"),
+        ];
+
+        clientUpdatePath = GetConfigValue("ClientUpdatePath");
+        serverUpdatePath = GetConfigValue("ServerUpdatePath");
+
+        updatePathDescriptions = [
+            GetConfigValue("UpdatePathDescription1"),
+            GetConfigValue("UpdatePathDescription2"),
+            GetConfigValue("UpdatePathDescription3"),
+        ];
+
+        radioButton1.Text = getUpdatePathDescription(1);
+
+        if (getUpdatePath(2) != null) {
+            radioButton2.Text = getUpdatePathDescription(2);
         } else {
             radioButton2.Visible = false;
         }
 
-        if (Package.Instance.GetUpdatePath(UpdatePathType.Path3) != null) {
-            radioButton3.Text = Package.Instance.GetUpdatePathDescription(3);
+        if (getUpdatePath(3) != null) {
+            radioButton3.Text = getUpdatePathDescription(3);
         } else {
             radioButton3.Visible = false;
         }
 
-        if (Package.Instance.OSVersion != "6.1") {
+        if (GetConfigValue(OSVersion) != "6.1") {
             radioButton1.Enabled = !Winver.IsWindowsServer;
             radioButton2.Checked = !radioButton1.Enabled;
         }
 
-        if (Package.Instance.OSVersion is "6.2" or "6.3" && Arch == "x86") {
+        if (GetConfigValue(OSVersion) is "6.2" or "6.3" && Arch == "x86") {
             radioButton2.Enabled = false;
             radioButton3.Enabled = false;
         }
+
+        string? getUpdatePathDescription(int index) => updatePathDescriptions[index - 1];
     }
 
     protected override void OK_Button_Click(object sender, EventArgs e) {
@@ -34,11 +57,11 @@ public partial class Choose {
         string path;
 
         if (radioButton1.Checked) {
-            path = Package.Instance.GetUpdatePath(UpdatePathType.Path1)!;
+            path = getUpdatePath(1)!;
         } else if (radioButton2.Checked) {
-            path = Package.Instance.GetUpdatePath(UpdatePathType.Path2)!;
+            path = getUpdatePath(2)!;
         } else if (radioButton3.Checked) {
-            path = Package.Instance.GetUpdatePath(UpdatePathType.Path3)!;
+            path = getUpdatePath(3)!;
         } else {
             throw new InvalidOperationException();
         }
@@ -47,7 +70,7 @@ public partial class Choose {
         var baseUpdatePath = path + "_" + Arch;
 
         // 추가 업데이트 경로
-        var additionalUpdatePath = !Winver.IsWindowsServer ? Package.Instance.GetUpdatePath(UpdatePathType.Client) : Package.Instance.GetUpdatePath(UpdatePathType.Server);
+        var additionalUpdatePath = !Winver.IsWindowsServer ? clientUpdatePath : serverUpdatePath;
 
         // 추가 업데이트 경로가 있으면
         if (additionalUpdatePath != null && Directory.Exists(additionalUpdatePath + "_" + Arch)) {
@@ -56,4 +79,6 @@ public partial class Choose {
 
         new Progress(Directory.GetFiles(baseUpdatePath, "*.cab").Concat(additionalUpdatePath != null ? Directory.GetFiles(additionalUpdatePath, "*.cab") : Enumerable.Empty<string>()).OrderBy(s => s.Split('\\').Last(), WinApiStrLogicalComparer.Shared)).Show();
     }
+
+    private string? getUpdatePath(int index) => updatePaths[index - 1];
 }

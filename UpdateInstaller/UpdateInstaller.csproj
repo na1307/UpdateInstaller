@@ -21,6 +21,7 @@
     <Using Include="UpdateInstaller.Features" />
     <Using Include="UpdateInstaller.Features.ErrDialogForms" Static="true" />
     <Using Include="UpdateInstaller.Constants" Static="true" />
+    <Using Include="UpdateInstaller.ConfigFileHelper" Static="true" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">

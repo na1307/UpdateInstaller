@@ -18,13 +18,13 @@ public sealed partial class MainForm {
         InitializeComponent();
         menuItem203.Text = string.Format(menuItem203.Text, AssemblyProperties.AssemblyTitle);
 
-        Text = (Package.Instance.OSVersion switch {
+        Text = (GetConfigValue(OSVersion) switch {
             "6.0" => "Windows Vista / Server 2008",
             "6.1" => "Windows 7 / Server 2008 R2",
             "6.2" => "Windows 8 / Server 2012",
             "6.3" => "Windows 8.1 / Server 2012 R2",
             _ => throw new InvalidOperationException(),
-        }) + " Update Package " + Package.Instance.PackageVersion;
+        }) + " Update Package " + GetConfigValue(PackageVersion);
     }
 
     protected override void OnActivated(EventArgs e) {
