@@ -1,18 +1,9 @@
 ﻿namespace UpdateInstaller;
 
 public sealed partial class MainForm {
-    private static MainForm? instance = null;
-    private static readonly object padlock = new();
+    private static readonly Lazy<MainForm> _Instance = new(() => new());
 
-    public static MainForm Instance {
-        get {
-            lock (padlock) {
-                instance ??= new();
-
-                return instance;
-            }
-        }
-    }
+    public static MainForm Instance => _Instance.Value;
 
     private MainForm() {
         InitializeComponent();
