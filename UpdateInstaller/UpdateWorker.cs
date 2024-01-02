@@ -7,6 +7,9 @@ public abstract class UpdateWorker {
     private readonly IEnumerable<Update> updates;
     private int progress;
 
+    protected UpdateWorker(IEnumerable<Update> updates) => this.updates = updates;
+    protected UpdateWorker(IEnumerable<string> updates) : this(updates.Select(u => new Update(u))) { }
+
     /// <summary>
     /// 한 업데이트 파일의 설치를 시작할 때 발생
     /// </summary>
@@ -16,9 +19,6 @@ public abstract class UpdateWorker {
     /// 한 업데이트 파일의 설치가 끝났을 때 발생
     /// </summary>
     public event EventHandler<UpdateInstallCompletedEventArgs>? InstallCompleted;
-
-    protected UpdateWorker(IEnumerable<Update> updates) => this.updates = updates;
-    protected UpdateWorker(IEnumerable<string> updates) : this(updates.Select(u => new Update(u))) { }
 
     /// <summary>
     /// 작업을 시작함

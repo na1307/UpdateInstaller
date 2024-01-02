@@ -2,6 +2,11 @@
 
 [DefaultEvent(nameof(Install))]
 public partial class PreEntry {
+    public PreEntry() {
+        InitializeComponent();
+        button1.Click += (_, _) => Install?.Invoke(this, EventArgs.Empty);
+    }
+
     public event EventHandler? Install;
 
     [Browsable(true)]
@@ -14,10 +19,5 @@ public partial class PreEntry {
             base.Text = value;
             label1.Text = value;
         }
-    }
-
-    public PreEntry() {
-        InitializeComponent();
-        button1.Click += (_, _) => Install?.Invoke(this, EventArgs.Empty);
     }
 }

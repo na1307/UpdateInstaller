@@ -11,6 +11,5 @@ public sealed partial class UIAboutBox {
         labelCopyright.Text = AssemblyCopyright;
         labelCompanyName.Text = AssemblyCompany;
         textBoxDescription.Text = AssemblyDescription;
-        okButton.Click += (_, _) => Close();
     }
 }

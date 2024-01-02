@@ -3,8 +3,6 @@
 public sealed partial class MainForm {
     private static readonly Lazy<MainForm> _Instance = new(() => new());
 
-    public static MainForm Instance => _Instance.Value;
-
     private MainForm() {
         InitializeComponent();
         menuItem203.Text = string.Format(menuItem203.Text, AssemblyProperties.AssemblyTitle);
@@ -17,6 +15,8 @@ public sealed partial class MainForm {
             _ => throw new InvalidOperationException(),
         }) + " Update Package " + GetConfigValue(PackageVersion);
     }
+
+    public static MainForm Instance => _Instance.Value;
 
     protected override void OnActivated(EventArgs e) {
         base.OnActivated(e);

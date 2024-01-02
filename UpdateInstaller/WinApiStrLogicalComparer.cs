@@ -3,9 +3,9 @@
 namespace UpdateInstaller;
 
 public sealed class WinApiStrLogicalComparer : IComparer<string> {
-    public static WinApiStrLogicalComparer Shared { get; } = new();
-
     private WinApiStrLogicalComparer() { }
+
+    public static WinApiStrLogicalComparer Shared { get; } = new();
 
     public static int Compare(string x, string y) => Compare(x, y, false);
 
