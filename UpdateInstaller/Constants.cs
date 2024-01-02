@@ -1,7 +1,7 @@
 ﻿namespace UpdateInstaller;
 
 public static class Constants {
-    public const ulong BuildNumber = 5;
+    public const ulong BuildNumber = 7;
     public const string PkgMgr = "PkgMgr";
     public const string Dism = "Dism";
     public const string DismApi = "Dism API";

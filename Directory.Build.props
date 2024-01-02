@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
     <Company>Bluehill</Company>
-    <Copyright>Copyright © Bluehill 2023</Copyright>
+    <Copyright>Copyright © Bluehill 2024</Copyright>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>True</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>

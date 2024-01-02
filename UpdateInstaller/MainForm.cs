@@ -42,7 +42,7 @@ public sealed partial class MainForm {
         if (!Properties.Settings.Default.AutoRestart && Status.MustRestart) {
             switch (MessageBox.Show("업데이트 설치를 완료하려면 다시 시작해야 합니다.\r\n\r\n지금 다시 시작 할까요?", "끝내기", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation)) {
                 case DialogResult.Yes:
-                    Process.Start(new ProcessStartInfo() { FileName = "shutdown.exe", Arguments = "/r /t 5 /f /c \"업데이트를 모두 설치했으므로 재부팅합니다.\"", WindowStyle = ProcessWindowStyle.Hidden });
+                    RestartHelper.Restart();
                     break;
 
                 case DialogResult.No:

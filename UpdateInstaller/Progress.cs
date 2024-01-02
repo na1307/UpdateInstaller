@@ -35,7 +35,7 @@ public sealed partial class Progress {
             textBox1.AppendText("작업을 취소했습니다.");
             ErrMsg("작업을 취소했습니다.");
         } else if (Status.MustRestart && Properties.Settings.Default.AutoRestart) {
-            Process.Start(new ProcessStartInfo() { FileName = "shutdown.exe", Arguments = "/r /t 5 /f /c \"업데이트를 모두 설치했으므로 재부팅합니다.\"", WindowStyle = ProcessWindowStyle.Hidden });
+            RestartHelper.Restart();
             Application.Exit();
         } else {
             textBox1.AppendText("작업을 완료했습니다.");
