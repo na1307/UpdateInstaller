@@ -13,7 +13,7 @@ partial class Progress : Form {
     protected override void Dispose(bool disposing) {
         if (disposing && (components != null)) {
             components.Dispose();
-            linkedWorker.Dispose();
+            cancellation.Dispose();
         }
         base.Dispose(disposing);
     }

@@ -3,66 +3,76 @@
 /// <summary>
 /// 업데이트 작업기
 /// </summary>
-public abstract class UpdateWorker : IDisposable {
-    private readonly BackgroundWorker backgroundWorker;
+public abstract class UpdateWorker {
+    private readonly IEnumerable<Update> updates;
     private int progress;
-    private bool disposedValue;
 
     /// <summary>
     /// 한 업데이트 파일의 설치를 시작할 때 발생
     /// </summary>
-    public event EventHandler<UpdateInfoEventArgs>? InstallStarted;
+    public event EventHandler<UpdateInstallStartedEventArgs>? InstallStarted;
 
     /// <summary>
     /// 한 업데이트 파일의 설치가 끝났을 때 발생
     /// </summary>
-    public event ProgressChangedEventHandler InstallCompleted {
-        add => backgroundWorker.ProgressChanged += value;
-        remove => backgroundWorker.ProgressChanged -= value;
-    }
+    public event EventHandler<UpdateInstallCompletedEventArgs>? InstallCompleted;
 
     /// <summary>
-    /// 작업이 모두 끝났을 때 발생
+    /// 업데이트 설치가 진행 중인지 여부
     /// </summary>
-    public event RunWorkerCompletedEventHandler WorkCompleted {
-        add => backgroundWorker.RunWorkerCompleted += value;
-        remove => backgroundWorker.RunWorkerCompleted -= value;
-    }
+    public bool IsWorking { get; private set; }
 
     /// <summary>
-    /// 작업이 모두 끝났는지 여부
+    /// 업데이트 설치가 취소되었는지 여부
     /// </summary>
-    public bool IsCompleted => !backgroundWorker.IsBusy;
+    public bool IsCanceled { get; private set; }
 
-    protected UpdateWorker(IEnumerable<Update> updates) {
-        backgroundWorker = new() {
-            WorkerReportsProgress = true,
-            WorkerSupportsCancellation = true,
-        };
-        backgroundWorker.DoWork += install;
-        backgroundWorker.RunWorkerAsync(updates);
-    }
-
+    protected UpdateWorker(IEnumerable<Update> updates) => this.updates = updates;
     protected UpdateWorker(IEnumerable<string> updates) : this(updates.Select(u => new Update(u))) { }
 
     /// <summary>
-    /// 작업을 중단함
+    /// 작업을 시작함
     /// </summary>
-    public void Abort() => backgroundWorker.CancelAsync();
+    /// <param name="token">토큰</param>
+    /// <returns></returns>
+    /// <exception cref="UpdateFailedException">업데이트 설치가 실패함</exception>
+    public Task StartWorkAsync(CancellationToken token) {
+        return Task.Run(startWork, token);
 
-    /// <inheritdoc/>
-    public void Dispose() {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
+        void startWork() {
+            IsWorking = true;
+            List<string> failedList = [];
 
-    protected virtual void Dispose(bool disposing) {
-        if (!disposedValue) {
-            if (disposing) {
-                backgroundWorker.Dispose();
+            foreach (Update update in updates) {
+                if (token.IsCancellationRequested) {
+                    IsCanceled = true;
+                    break;
+                }
+
+                InstallStarted?.Invoke(this, new(update, ++progress));
+
+                var result = InstallSingle(update);
+
+                switch (result) {
+                    case 0:
+                        break;
+
+                    case 3010:
+                        Status.MustRestart = true;
+                        break;
+
+                    default:
+                        failedList.Add(update.Name);
+                        break;
+                }
+
+                InstallCompleted?.Invoke(this, new(progress, result));
             }
 
-            disposedValue = true;
+            IsWorking = false;
+            var failedString = failedList.ToJoinedString(", ");
+
+            if (!string.IsNullOrEmpty(failedString)) throw new UpdateFailedException(failedString + " 업데이트 설치를 실패했습니다.");
         }
     }
 
@@ -70,45 +80,8 @@ public abstract class UpdateWorker : IDisposable {
     /// 업데이트 파일 하나를 설치함
     /// </summary>
     /// <param name="update">설치할 업데이트 파일의 전체 경로</param>
-    /// <returns>작업의 결과</returns>
+    /// <returns>종료 코드</returns>
     protected abstract int InstallSingle(Update update);
-
-    private void install(object sender, DoWorkEventArgs e) {
-        Thread.Sleep(500);
-
-        List<string> failedList = [];
-
-        foreach (Update update in (IEnumerable<Update>)e.Argument) {
-            if (backgroundWorker.CancellationPending) {
-                e.Cancel = true;
-                break;
-            }
-
-            InstallStarted?.Invoke(this, new(update, ++progress));
-
-            var result = InstallSingle(update);
-
-            switch (result) {
-                case 0:
-                    break;
-
-                case 3010:
-                    Status.MustRestart = true;
-                    break;
-
-                default:
-                    failedList.Add(update.Name);
-                    break;
-            }
-
-            backgroundWorker.ReportProgress(progress, result);
-            Thread.Sleep(200);
-        }
-
-        var failedString = failedList.ToJoinedString(", ");
-
-        if (!string.IsNullOrEmpty(failedString)) throw new UpdateFailedException(failedString + " 업데이트 설치를 실패했습니다.");
-    }
 
     private sealed class UpdateFailedException : UpdateInstallerException {
         public UpdateFailedException(string message) : base(message) { }
