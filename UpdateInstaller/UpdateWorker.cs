@@ -17,16 +17,6 @@ public abstract class UpdateWorker {
     /// </summary>
     public event EventHandler<UpdateInstallCompletedEventArgs>? InstallCompleted;
 
-    /// <summary>
-    /// 업데이트 설치가 진행 중인지 여부
-    /// </summary>
-    public bool IsWorking { get; private set; }
-
-    /// <summary>
-    /// 업데이트 설치가 취소되었는지 여부
-    /// </summary>
-    public bool IsCanceled { get; private set; }
-
     protected UpdateWorker(IEnumerable<Update> updates) => this.updates = updates;
     protected UpdateWorker(IEnumerable<string> updates) : this(updates.Select(u => new Update(u))) { }
 
@@ -36,18 +26,14 @@ public abstract class UpdateWorker {
     /// <param name="token">토큰</param>
     /// <returns></returns>
     /// <exception cref="UpdateFailedException">업데이트 설치가 실패함</exception>
-    public Task StartWorkAsync(CancellationToken token) {
+    public Task WorkAsync(CancellationToken token) {
         return Task.Run(startWork, token);
 
         void startWork() {
-            IsWorking = true;
             List<string> failedList = [];
 
             foreach (Update update in updates) {
-                if (token.IsCancellationRequested) {
-                    IsCanceled = true;
-                    break;
-                }
+                if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
 
                 InstallStarted?.Invoke(this, new(update, ++progress));
 
@@ -69,7 +55,6 @@ public abstract class UpdateWorker {
                 InstallCompleted?.Invoke(this, new(progress, result));
             }
 
-            IsWorking = false;
             var failedString = failedList.ToJoinedString(", ");
 
             if (!string.IsNullOrEmpty(failedString)) throw new UpdateFailedException(failedString + " 업데이트 설치를 실패했습니다.");

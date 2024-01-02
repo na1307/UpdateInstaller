@@ -4,6 +4,7 @@ public sealed partial class Progress {
     private const string progressText = "업데이트 {0}개 중 {1}개 설치 완료 ({2}%)";
     private readonly UpdateWorker linkedWorker;
     private readonly CancellationTokenSource cancellation;
+    private Task? workerTask;
 
     public Progress(IEnumerable<string> updates) {
         InitializeComponent();
@@ -20,18 +21,18 @@ public sealed partial class Progress {
     protected override async void OnShown(EventArgs e) {
         base.OnShown(e);
 
-        UpdateInstallerException? error = null;
+        workerTask = linkedWorker.WorkAsync(cancellation.Token);
 
         try {
-            await linkedWorker.StartWorkAsync(cancellation.Token);
-        } catch (UpdateInstallerException ex) {
-            error = ex;
+            await workerTask;
+        } catch {
+            // Do Nothing
         }
 
-        if (error != null) {
+        if (workerTask.IsFaulted) {
             textBox1.AppendText("작업 중 오류가 발생했습니다.");
-            ErrMsg(error.Message);
-        } else if (linkedWorker.IsCanceled) {
+            ErrMsg(workerTask.Exception.InnerException.Message);
+        } else if (workerTask.IsCanceled) {
             textBox1.AppendText("작업을 취소했습니다.");
             ErrMsg("작업을 취소했습니다.");
         } else if (Status.MustRestart && Properties.Settings.Default.AutoRestart) {
@@ -49,7 +50,7 @@ public sealed partial class Progress {
     protected override void OnFormClosing(FormClosingEventArgs e) {
         base.OnFormClosing(e);
 
-        if (linkedWorker.IsWorking) {
+        if (!workerTask?.IsCompleted ?? false) {
             e.Cancel = true;
 
             if (MessageBox.Show("정말 작업을 취소할까요?", "취소", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes) {
