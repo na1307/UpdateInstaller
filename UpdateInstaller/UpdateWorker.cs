@@ -57,7 +57,7 @@ public abstract class UpdateWorker {
 
             var failedString = failedList.ToJoinedString(", ");
 
-            if (!string.IsNullOrEmpty(failedString)) throw new UpdateFailedException(failedString + " 업데이트 설치를 실패했습니다.");
+            if (!string.IsNullOrEmpty(failedString)) throw new UpdateInstallerException(failedString + " 업데이트 설치를 실패했습니다.");
         }
     }
 
@@ -67,9 +67,4 @@ public abstract class UpdateWorker {
     /// <param name="update">설치할 업데이트 파일의 전체 경로</param>
     /// <returns>종료 코드</returns>
     protected abstract int InstallSingle(Update update);
-
-    private sealed class UpdateFailedException : UpdateInstallerException {
-        public UpdateFailedException(string message) : base(message) { }
-        public UpdateFailedException(string message, Exception inner) : base(message, inner) { }
-    }
 }

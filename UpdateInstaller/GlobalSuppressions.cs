@@ -6,3 +6,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Minor Code Smell", "S6608:Prefer indexing instead of \"Enumerable\" methods on types implementing \"IList\"", Justification = "<보류 중>", Scope = "module")]
+[assembly: SuppressMessage("Minor Code Smell", "S3241:Methods should not return values that are never used", Justification = "<보류 중>", Scope = "member", Target = "~M:UpdateInstaller.Program.Main")]
