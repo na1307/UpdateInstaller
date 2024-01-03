@@ -50,11 +50,11 @@ public sealed partial class MainForm {
     }
 
     private void button1_Click(object sender, EventArgs e) {
-        if (new Choose().ShowDialog() == DialogResult.OK) Hide();
+        if (new ChooseDialog().ShowDialog() == DialogResult.OK) Hide();
     }
 
     private void button2_Click(object sender, EventArgs e) {
-        if (new Pre().ShowDialog() == DialogResult.OK) Hide();
+        if (new PreDialog().ShowDialog() == DialogResult.OK) Hide();
     }
 
     private void button3_Click(object sender, EventArgs e) {

@@ -1,6 +1,6 @@
 ﻿namespace UpdateInstaller;
 
-partial class Pre : Dialog {
+partial class PreDialog : Dialog {
     /// <summary>
     /// Required designer variable.
     /// </summary>

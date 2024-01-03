@@ -12,7 +12,7 @@ namespace UpdateInstaller.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.7.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.8.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -38,12 +38,12 @@ namespace UpdateInstaller.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Dism")]
-        public string PackageProgram {
+        public global::UpdateInstaller.WorkerType UpdateWorker {
             get {
-                return ((string)(this["PackageProgram"]));
+                return ((global::UpdateInstaller.WorkerType)(this["UpdateWorker"]));
             }
             set {
-                this["PackageProgram"] = value;
+                this["UpdateWorker"] = value;
             }
         }
     }

@@ -22,7 +22,7 @@ internal static class Program {
             if (GetConfigValue(OSVersion) != Environment.OSVersion.Version.ToString(2) || GetConfigValue(SPVersion) != Winver.SPLevel.ToString()) throw new UpdateInstallerException("패키지와 현재 운영 체제가 호환되지 않습니다.");
 #endif
 
-            if (GetConfigValue(OSVersion) == "6.0" && Settings.Default.PackageProgram != PkgMgr) Settings.Default.PackageProgram = PkgMgr;
+            if (GetConfigValue(OSVersion) == "6.0" && Settings.Default.UpdateWorker != WorkerType.PkgMgr) Settings.Default.UpdateWorker = WorkerType.PkgMgr;
 
             using Mutex uiMutex = new(true, "Global\\eadb0d97-ce09-49e5-a17f-11acdb02323a", out var isCreated);
 

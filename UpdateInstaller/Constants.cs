@@ -1,10 +1,7 @@
 ﻿namespace UpdateInstaller;
 
 public static class Constants {
-    public const ulong BuildNumber = 11;
-    public const string PkgMgr = "PkgMgr";
-    public const string Dism = "Dism";
-    public const string DismApi = "Dism API";
+    public const ulong BuildNumber = 12;
     public const string ConfigFileName = "UpdateInstaller.xml";
     public const string OSVersion = nameof(OSVersion);
     public const string SPVersion = nameof(SPVersion);

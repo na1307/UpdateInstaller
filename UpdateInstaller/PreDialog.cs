@@ -1,10 +1,10 @@
 ﻿namespace UpdateInstaller;
 
-public sealed partial class Pre {
+public sealed partial class PreDialog {
     private readonly string preUpdatePath;
     private readonly Dictionary<string, string[]> preUpdates;
 
-    public Pre() {
+    public PreDialog() {
         InitializeComponent();
         HideOKButton();
 

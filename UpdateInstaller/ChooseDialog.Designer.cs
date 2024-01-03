@@ -1,6 +1,6 @@
 ﻿namespace UpdateInstaller;
 
-partial class Choose : Dialog {
+partial class ChooseDialog : Dialog {
     /// <summary>
     /// Required designer variable.
     /// </summary>

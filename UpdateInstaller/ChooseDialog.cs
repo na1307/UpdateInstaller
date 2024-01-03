@@ -1,12 +1,12 @@
 ﻿namespace UpdateInstaller;
 
-public partial class Choose {
+public partial class ChooseDialog {
     private readonly string?[] updatePaths;
     private readonly string? clientUpdatePath;
     private readonly string? serverUpdatePath;
     private readonly string?[] updatePathDescriptions;
 
-    public Choose() {
+    public ChooseDialog() {
         InitializeComponent();
 
         updatePaths = [
