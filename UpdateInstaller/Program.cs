@@ -4,6 +4,21 @@ using UpdateInstaller.Properties;
 namespace UpdateInstaller;
 
 internal static class Program {
+    private enum SW {
+        Hide,
+        Normal,
+        ShowMinimized,
+        ShowMaximized,
+        ShowNoActivate,
+        Show,
+        Minimize,
+        ShowMinNoActive,
+        ShowNa,
+        Restore,
+        ShowDefault,
+        ForceMinimize
+    }
+
     [STAThread]
     private static void Main() {
         Application.EnableVisualStyles();
@@ -47,20 +62,5 @@ internal static class Program {
         } catch (UpdateInstallerException e) {
             ErrMsg(e.Message);
         }
-    }
-
-    private enum SW {
-        Hide,
-        Normal,
-        ShowMinimized,
-        ShowMaximized,
-        ShowNoActivate,
-        Show,
-        Minimize,
-        ShowMinNoActive,
-        ShowNa,
-        Restore,
-        ShowDefault,
-        ForceMinimize
     }
 }

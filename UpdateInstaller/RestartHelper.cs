@@ -9,48 +9,6 @@ public static class RestartHelper {
     private const uint SE_PRIVILEGE_ENABLED = 0x0002;
     private const string shutdownMessage = "업데이트 작업을 완료했습니다. 시스템을 다시 시작합니다.";
 
-    public static void Restart() {
-        if (!OpenProcessToken(Process.GetCurrentProcess().Handle, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, out var th)) {
-            throw new Exception("opt failed " + Marshal.GetLastWin32Error().ToString("X"));
-        }
-
-        if (!LookupPrivilegeValueW(null, SE_SHUTDOWN_NAME, out var test)) {
-            throw new Exception("lpv failed " + Marshal.GetLastWin32Error().ToString("X"));
-        }
-
-        TOKEN_PRIVILEGES tp = new() { PrivilegeCount = 1, Privileges = [new() { Attributes = SE_PRIVILEGE_ENABLED, Luid = test }] };
-
-        if (!AdjustTokenPrivileges(th, false, in tp, 100, out _, out _)) {
-            throw new Exception("atp failed " + Marshal.GetLastWin32Error().ToString("X"));
-        }
-
-        if (!InitiateSystemShutdownExW(null, shutdownMessage, 30, false, true, ShutdownReason.SHTDN_REASON_MAJOR_OTHER | ShutdownReason.SHTDN_REASON_MINOR_OTHER | ShutdownReason.SHTDN_REASON_FLAG_PLANNED)) {
-            throw new Exception("issex failed " + Marshal.GetLastWin32Error().ToString("X"));
-        }
-    }
-
-    [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool OpenProcessToken(IntPtr ProcessHandle, uint DesiredAccess, out IntPtr TokenHandle);
-
-    [DllImport("advapi32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool LookupPrivilegeValueW([MarshalAs(UnmanagedType.LPWStr)] string? lpSystemName, [MarshalAs(UnmanagedType.LPWStr)] string lpName, out LUID lpLuid);
-
-    [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool AdjustTokenPrivileges(IntPtr TokenHandle, [MarshalAs(UnmanagedType.Bool)] bool DisableAllPrivileges, in TOKEN_PRIVILEGES NewState, uint BufferLength, out TOKEN_PRIVILEGES PreviousState, out uint ReturnLength);
-
-    [DllImport("advapi32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool InitiateSystemShutdownExW(
-        [MarshalAs(UnmanagedType.LPWStr)] string? lpMachineName,
-        [MarshalAs(UnmanagedType.LPWStr)] string? lpMessage,
-        uint dwTimeout,
-        [MarshalAs(UnmanagedType.Bool)] bool bForceAppsClosed,
-        [MarshalAs(UnmanagedType.Bool)] bool bRebootAfterShutdown,
-        ShutdownReason dwReason);
-
     [Flags]
     private enum ShutdownReason : uint {
         // Major reasons
@@ -101,6 +59,48 @@ public static class RestartHelper {
         SHTDN_REASON_FLAG_USER_DEFINED = 0x40000000,
         SHTDN_REASON_FLAG_PLANNED = 0x80000000,
     }
+
+    public static void Restart() {
+        if (!OpenProcessToken(Process.GetCurrentProcess().Handle, TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, out var th)) {
+            throw new Exception("opt failed " + Marshal.GetLastWin32Error().ToString("X"));
+        }
+
+        if (!LookupPrivilegeValueW(null, SE_SHUTDOWN_NAME, out var test)) {
+            throw new Exception("lpv failed " + Marshal.GetLastWin32Error().ToString("X"));
+        }
+
+        TOKEN_PRIVILEGES tp = new() { PrivilegeCount = 1, Privileges = [new() { Attributes = SE_PRIVILEGE_ENABLED, Luid = test }] };
+
+        if (!AdjustTokenPrivileges(th, false, in tp, 100, out _, out _)) {
+            throw new Exception("atp failed " + Marshal.GetLastWin32Error().ToString("X"));
+        }
+
+        if (!InitiateSystemShutdownExW(null, shutdownMessage, 30, false, true, ShutdownReason.SHTDN_REASON_MAJOR_OTHER | ShutdownReason.SHTDN_REASON_MINOR_OTHER | ShutdownReason.SHTDN_REASON_FLAG_PLANNED)) {
+            throw new Exception("issex failed " + Marshal.GetLastWin32Error().ToString("X"));
+        }
+    }
+
+    [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool OpenProcessToken(IntPtr ProcessHandle, uint DesiredAccess, out IntPtr TokenHandle);
+
+    [DllImport("advapi32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool LookupPrivilegeValueW([MarshalAs(UnmanagedType.LPWStr)] string? lpSystemName, [MarshalAs(UnmanagedType.LPWStr)] string lpName, out LUID lpLuid);
+
+    [DllImport("advapi32.dll", ExactSpelling = true, SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool AdjustTokenPrivileges(IntPtr TokenHandle, [MarshalAs(UnmanagedType.Bool)] bool DisableAllPrivileges, in TOKEN_PRIVILEGES NewState, uint BufferLength, out TOKEN_PRIVILEGES PreviousState, out uint ReturnLength);
+
+    [DllImport("advapi32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool InitiateSystemShutdownExW(
+        [MarshalAs(UnmanagedType.LPWStr)] string? lpMachineName,
+        [MarshalAs(UnmanagedType.LPWStr)] string? lpMessage,
+        uint dwTimeout,
+        [MarshalAs(UnmanagedType.Bool)] bool bForceAppsClosed,
+        [MarshalAs(UnmanagedType.Bool)] bool bRebootAfterShutdown,
+        ShutdownReason dwReason);
 
     private struct TOKEN_PRIVILEGES {
         public uint PrivilegeCount;
