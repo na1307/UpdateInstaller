@@ -3,8 +3,8 @@
 public sealed class DismWorker : UpdateWorker {
     private readonly ProcessStartInfo dismStartInfo = new() { FileName = "dism.exe", UseShellExecute = true, WindowStyle = ProcessWindowStyle.Hidden };
 
-    public DismWorker(IEnumerable<Update> updates) : base(updates) { }
-    public DismWorker(IEnumerable<string> updates) : base(updates) { }
+    public DismWorker(IEnumerable<Update> updates, Form form) : base(updates, form) { }
+    public DismWorker(IEnumerable<string> updates, Form form) : base(updates, form) { }
 
     protected override int InstallSingle(Update update) {
         // 임시 디렉토리 생성

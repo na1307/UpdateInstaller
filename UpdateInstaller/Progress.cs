@@ -13,7 +13,7 @@ public sealed partial class Progress {
         okButton.Enabled = false;
         label1.Text = string.Format(progressText, progressBar1.Maximum, 0, 0);
         cancellation = new();
-        linkedWorker = UpdateWorkerFactory.Create(updates);
+        linkedWorker = UpdateWorkerFactory.Create(updates, this);
         linkedWorker.InstallStarted += linkedWorker_InstallStarted;
         linkedWorker.InstallCompleted += linkedWorker_InstallCompleted;
     }
