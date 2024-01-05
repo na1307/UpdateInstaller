@@ -11,3 +11,5 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Critical Code Smell", "S2346:Flags enumerations zero-value members should be named \"None\"", Justification = "<보류 중>", Scope = "type", Target = "~T:UpdateInstaller.RestartHelper.ShutdownReason")]
 [assembly: SuppressMessage("Major Code Smell", "S112:General or reserved exceptions should never be thrown", Justification = "<보류 중>", Scope = "member", Target = "~M:UpdateInstaller.RestartHelper.Restart")]
 [assembly: SuppressMessage("Minor Code Smell", "S101:Types should be named in PascalCase", Justification = "<보류 중>", Scope = "type", Target = "~T:UpdateInstaller.RestartHelper")]
+[assembly: SuppressMessage("Critical Code Smell", "S2696:Instance members should not write to \"static\" fields", Justification = "<보류 중>", Scope = "member", Target = "~M:UpdateInstaller.MainForm.WndProc(System.Windows.Forms.Message@)")]
+[assembly: SuppressMessage("Critical Code Smell", "S2696:Instance members should not write to \"static\" fields", Justification = "<보류 중>", Scope = "member", Target = "~M:UpdateInstaller.Progress.WndProc(System.Windows.Forms.Message@)")]

@@ -2,6 +2,7 @@
 
 public sealed partial class Progress {
     private const string progressText = "업데이트 {0}개 중 {1}개 설치 완료 ({2}%)";
+    private static bool systemShutdown;
     private readonly UpdateWorker linkedWorker;
     private readonly CancellationTokenSource cancellation;
     private Task? workerTask;
@@ -29,18 +30,21 @@ public sealed partial class Progress {
             // Do Nothing
         }
 
-        if (workerTask.IsFaulted) {
-            textBox1.AppendText("작업 중 오류가 발생했습니다.");
-            ErrMsg(workerTask.Exception.InnerException.Message);
-        } else if (workerTask.IsCanceled) {
-            textBox1.AppendText("작업을 취소했습니다.");
-            ErrMsg("작업을 취소했습니다.");
-        } else if (Status.MustRestart && Properties.Settings.Default.AutoRestart) {
-            RestartHelper.Restart();
-            Application.Exit();
-        } else {
-            textBox1.AppendText("작업을 완료했습니다.");
-            MessageBox.Show("작업을 완료했습니다." + (Status.MustRestart ? "\r\n\r\n지금 다시 시작하는 것이 좋습니다." : string.Empty), "작업 완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        if (!systemShutdown) {
+            if (Status.MustRestart && Properties.Settings.Default.AutoRestart) {
+                RestartHelper.Restart();
+                Application.Exit();
+                return;
+            } else if (workerTask.IsFaulted) {
+                textBox1.AppendText("작업 중 오류가 발생했습니다.");
+                ErrMsg(workerTask.Exception.InnerException.Message);
+            } else if (workerTask.IsCanceled) {
+                textBox1.AppendText("작업을 취소했습니다.");
+                ErrMsg("작업을 취소했습니다.");
+            } else {
+                textBox1.AppendText("작업을 완료했습니다.");
+                MessageBox.Show("작업을 완료했습니다." + (Status.MustRestart ? "\r\n\r\n지금 다시 시작하는 것이 좋습니다." : string.Empty), "작업 완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         okButton.Enabled = true;
@@ -50,7 +54,7 @@ public sealed partial class Progress {
     protected override void OnFormClosing(FormClosingEventArgs e) {
         base.OnFormClosing(e);
 
-        if (!workerTask?.IsCompleted ?? false) {
+        if (workerTask is not null && !workerTask.IsCompleted && !systemShutdown) {
             e.Cancel = true;
 
             if (MessageBox.Show("정말 작업을 취소할까요?", "취소", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes) {
@@ -58,12 +62,22 @@ public sealed partial class Progress {
                 cancelButton.Enabled = false;
                 textBox1.AppendText("\r\n취소하는 중입니다. 잠시 기다려 주세요...");
             }
+        } else if (systemShutdown) {
+            cancellation.Cancel();
         }
     }
 
     protected override void OnFormClosed(FormClosedEventArgs e) {
         base.OnFormClosed(e);
         MainForm.Instance.Show();
+    }
+
+    protected override void WndProc(ref Message m) {
+        if (m.Msg == WM_QUERYENDSESSION) {
+            systemShutdown = true;
+        }
+
+        base.WndProc(ref m);
     }
 
     private void okButton_Click(object sender, EventArgs e) => Close();

@@ -2,6 +2,7 @@
 
 public sealed partial class MainForm {
     private static readonly Lazy<MainForm> _Instance = new(() => new());
+    private static bool systemShutdown;
 
     private MainForm() {
         InitializeComponent();
@@ -30,7 +31,7 @@ public sealed partial class MainForm {
     protected override void OnFormClosing(FormClosingEventArgs e) {
         base.OnFormClosing(e);
 
-        if (!Properties.Settings.Default.AutoRestart && Status.MustRestart) {
+        if (!Properties.Settings.Default.AutoRestart && Status.MustRestart && !systemShutdown) {
             switch (MessageBox.Show("업데이트 설치를 완료하려면 다시 시작해야 합니다.\r\n\r\n지금 다시 시작 할까요?", "끝내기", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation)) {
                 case DialogResult.Yes:
                     RestartHelper.Restart();
@@ -47,6 +48,14 @@ public sealed partial class MainForm {
                     throw new InvalidOperationException();
             }
         }
+    }
+
+    protected override void WndProc(ref Message m) {
+        if (m.Msg == WM_QUERYENDSESSION) {
+            systemShutdown = true;
+        }
+
+        base.WndProc(ref m);
     }
 
     private void button1_Click(object sender, EventArgs e) {
