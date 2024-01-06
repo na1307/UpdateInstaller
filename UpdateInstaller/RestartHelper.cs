@@ -75,7 +75,7 @@ public static class RestartHelper {
             throw new Exception("atp failed " + Marshal.GetLastWin32Error().ToString("X"));
         }
 
-        if (!InitiateSystemShutdownExW(null, shutdownMessage, 30, false, true, ShutdownReason.SHTDN_REASON_MAJOR_OTHER | ShutdownReason.SHTDN_REASON_MINOR_OTHER | ShutdownReason.SHTDN_REASON_FLAG_PLANNED)) {
+        if (!InitiateSystemShutdownExW(null, shutdownMessage, 5, false, true, ShutdownReason.SHTDN_REASON_MAJOR_OTHER | ShutdownReason.SHTDN_REASON_MINOR_OTHER | ShutdownReason.SHTDN_REASON_FLAG_PLANNED)) {
             throw new Exception("issex failed " + Marshal.GetLastWin32Error().ToString("X"));
         }
     }

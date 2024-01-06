@@ -15,7 +15,7 @@ public sealed class WinApiStrLogicalComparer : IComparer<string> {
         return !reverse ? value : value switch { < 0 => 1, 0 => 0, > 0 => -1 };
 
         [DllImport("shlwapi.dll", CharSet = CharSet.Unicode, ExactSpelling = true)]
-        static extern int StrCmpLogicalW(string x, string y);
+        static extern int StrCmpLogicalW([MarshalAs(UnmanagedType.LPWStr)] string x, [MarshalAs(UnmanagedType.LPWStr)] string y);
     }
 
     int IComparer<string>.Compare(string x, string y) => Compare(x, y);

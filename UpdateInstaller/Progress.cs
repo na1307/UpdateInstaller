@@ -1,4 +1,6 @@
-﻿namespace UpdateInstaller;
+﻿using UpdateInstaller.Win7Taskbar;
+
+namespace UpdateInstaller;
 
 public sealed partial class Progress {
     private const string progressText = "업데이트 {0}개 중 {1}개 설치 완료 ({2}%)";
@@ -22,6 +24,7 @@ public sealed partial class Progress {
     protected override async void OnShown(EventArgs e) {
         base.OnShown(e);
 
+        Win7TaskbarFunctions.SetProgressState(Handle, TaskbarStates.Normal);
         workerTask = linkedWorker.WorkAsync(cancellation.Token);
 
         try {
@@ -36,12 +39,15 @@ public sealed partial class Progress {
                 Application.Exit();
                 return;
             } else if (workerTask.IsFaulted) {
+                Win7TaskbarFunctions.SetProgressState(Handle, TaskbarStates.Error);
                 textBox1.AppendText("작업 중 오류가 발생했습니다.");
                 ErrMsg(workerTask.Exception.InnerException.Message);
             } else if (workerTask.IsCanceled) {
+                Win7TaskbarFunctions.SetProgressState(Handle, TaskbarStates.Error);
                 textBox1.AppendText("작업을 취소했습니다.");
                 ErrMsg("작업을 취소했습니다.");
             } else {
+                Win7TaskbarFunctions.SetProgressState(Handle, TaskbarStates.Normal);
                 textBox1.AppendText("작업을 완료했습니다.");
                 MessageBox.Show("작업을 완료했습니다." + (Status.MustRestart ? "\r\n\r\n지금 다시 시작하는 것이 좋습니다." : string.Empty), "작업 완료", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -85,6 +91,7 @@ public sealed partial class Progress {
     private void linkedWorker_InstallStarted(object sender, UpdateInstallStartedEventArgs e) => textBox1.AppendText($"{e.Update.Name} 설치 중(업데이트 {e.Count} / {progressBar1.Maximum})...");
 
     private void linkedWorker_InstallCompleted(object sender, UpdateInstallCompletedEventArgs e) {
+        Win7TaskbarFunctions.SetProgressValue(Handle, (ulong)e.Progress, (ulong)progressBar1.Maximum);
         textBox1.AppendText(e.Result switch {
             0 or 3010 => " 성공.\r\n",
             _ => " 실패. (코드: " + e.Result + ")\r\n",
