@@ -3,18 +3,18 @@
 namespace UpdateInstaller.Win7Taskbar;
 
 public static class Win7TaskbarFunctions {
-    private static readonly ITaskbarList4 taskbarList = (ITaskbarList4)new TaskbarList();
-    private static readonly bool taskbarSupported = Environment.OSVersion.Version >= new Version(6, 1);
+    private static readonly Lazy<ITaskbarList4> taskbarList = new(() => (ITaskbarList4)new TaskbarList());
+    private static readonly bool win7orGreater = Environment.OSVersion.Version >= new Version(6, 1);
 
     public static void SetProgressState(IntPtr windowHandle, TaskbarStates taskbarState) {
-        if (taskbarSupported) {
-            taskbarList.SetProgressState(windowHandle, taskbarState);
+        if (win7orGreater) {
+            taskbarList.Value.SetProgressState(windowHandle, taskbarState);
         }
     }
 
     public static void SetProgressValue(IntPtr windowHandle, ulong progressValue, ulong progressMax) {
-        if (taskbarSupported) {
-            taskbarList.SetProgressValue(windowHandle, progressValue, progressMax);
+        if (win7orGreater) {
+            taskbarList.Value.SetProgressValue(windowHandle, progressValue, progressMax);
         }
     }
 
