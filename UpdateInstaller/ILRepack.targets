@@ -9,7 +9,7 @@
 
     <ILRepack
         Parallel="true"
-        Internalize="true"
+        Internalize="false"
         Union="true"
         Wildcards="true"
         InputAssemblies="@(InputAssemblies)"

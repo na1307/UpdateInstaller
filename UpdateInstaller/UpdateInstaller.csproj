@@ -17,8 +17,7 @@
     <Using Include="System.ComponentModel" />
     <Using Include="System.Diagnostics" />
     <Using Include="Bluehill" />
-    <Using Include="UpdateInstaller.Features" />
-    <Using Include="UpdateInstaller.Features.ErrDialogForms" Static="true" />
+    <Using Include="Bluehill.ErrDialogForms" Static="true" />
     <Using Include="UpdateInstaller.Constants" Static="true" />
     <Using Include="UpdateInstaller.ConfigFileHelper" Static="true" />
   </ItemGroup>
@@ -41,8 +40,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.18.2" />
+    <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.25" />
+    <PackageReference Include="Bluehill.CompilerServices" Version="1.1.0" />
+    <PackageReference Include="Bluehill.TaskbarMethods" Version="1.0.1" />
     <PackageReference Include="Bluehill.Features" Version="0.1.0" />
+    <PackageReference Include="Bluehill.Forms" Version="0.1.1" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core.Net20">

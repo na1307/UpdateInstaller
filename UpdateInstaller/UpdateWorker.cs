@@ -47,8 +47,7 @@ public abstract class UpdateWorker : IDisposable {
             List<string> failedList = [];
 
             foreach (Update update in updates) {
-                if (token.IsCancellationRequested) token.ThrowIfCancellationRequested();
-
+                token.ThrowIfCancellationRequested();
                 InstallStarted?.Invoke(this, new(update, ++progress));
 
                 var result = InstallSingle(update);
