@@ -6,7 +6,7 @@ public sealed class DismWorker : UpdateWorker {
     public DismWorker(IEnumerable<Update> updates, Form form) : base(updates, form) { }
     public DismWorker(IEnumerable<string> updates, Form form) : base(updates, form) { }
 
-    protected override int InstallSingle(Update update) {
+    protected override async Task<int> InstallSingleAsync(Update update, CancellationToken token) {
         // 임시 디렉토리 생성
         DirectoryInfo sandboxDirectory = Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("temp"), update.Name));
 
@@ -16,7 +16,7 @@ public sealed class DismWorker : UpdateWorker {
         using Process dism = new() { StartInfo = dismStartInfo };
 
         dism.Start(); // Dism 작업 시작
-        dism.WaitForExit(); // 끝날 때 까지 기다림
+        await dism.WaitForExitAsync(token); // 끝날 때 까지 기다림
 
         try {
             sandboxDirectory.Delete(true); // 임시 디렉토리 삭제

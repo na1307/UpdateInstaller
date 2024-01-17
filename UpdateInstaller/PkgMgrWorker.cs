@@ -6,7 +6,7 @@ public sealed class PkgMgrWorker : UpdateWorker {
     public PkgMgrWorker(IEnumerable<Update> updates, Form form) : base(updates, form) { }
     public PkgMgrWorker(IEnumerable<string> updates, Form form) : base(updates, form) { }
 
-    protected override int InstallSingle(Update update) {
+    protected override async Task<int> InstallSingleAsync(Update update, CancellationToken token) {
         // 임시 디렉토리 생성
         DirectoryInfo sandboxDirectory = Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("temp"), update.Name));
 
@@ -16,7 +16,7 @@ public sealed class PkgMgrWorker : UpdateWorker {
         using Process pkgMgr = new() { StartInfo = pkgMgrStartInfo };
 
         pkgMgr.Start(); // PkgMgr 작업 시작
-        pkgMgr.WaitForExit(); // 끝날 때 까지 기다림
+        await pkgMgr.WaitForExitAsync(token); // 끝날 때 까지 기다림
 
         try {
             sandboxDirectory.Delete(true); // 임시 디렉토리 삭제

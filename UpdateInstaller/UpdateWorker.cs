@@ -39,39 +39,35 @@ public abstract class UpdateWorker : IDisposable {
     /// </summary>
     /// <param name="token">토큰</param>
     /// <returns></returns>
-    /// <exception cref="UpdateFailedException">업데이트 설치가 실패함</exception>
-    public Task WorkAsync(CancellationToken token) {
-        return Task.Run(startWork, token);
+    /// <exception cref="UpdateInstallerException">업데이트 설치가 실패함</exception>
+    public async Task WorkAsync(CancellationToken token) {
+        List<string> failedList = [];
 
-        void startWork() {
-            List<string> failedList = [];
+        foreach (Update update in updates) {
+            token.ThrowIfCancellationRequested();
+            InstallStarted?.Invoke(this, new(update, ++progress));
 
-            foreach (Update update in updates) {
-                token.ThrowIfCancellationRequested();
-                InstallStarted?.Invoke(this, new(update, ++progress));
+            var result = await InstallSingleAsync(update, token);
 
-                var result = InstallSingle(update);
+            InstallCompleted?.Invoke(this, new(progress, result));
 
-                switch (result) {
-                    case 0:
-                        break;
+            switch (result) {
+                case 0:
+                    break;
 
-                    case 3010:
-                        Status.MustRestart = true;
-                        break;
+                case 3010:
+                    Status.MustRestart = true;
+                    break;
 
-                    default:
-                        failedList.Add(update.Name);
-                        break;
-                }
-
-                InstallCompleted?.Invoke(this, new(progress, result));
+                default:
+                    failedList.Add(update.Name);
+                    break;
             }
-
-            var failedString = failedList.ToJoinedString(", ");
-
-            if (!string.IsNullOrEmpty(failedString)) throw new UpdateInstallerException(failedString + " 업데이트 설치를 실패했습니다.");
         }
+
+        var failedString = failedList.ToJoinedString(", ");
+
+        if (!string.IsNullOrEmpty(failedString)) throw new UpdateInstallerException(failedString + " 업데이트 설치를 실패했습니다.");
     }
 
     public void Dispose() {
@@ -83,8 +79,9 @@ public abstract class UpdateWorker : IDisposable {
     /// 업데이트 파일 하나를 설치함
     /// </summary>
     /// <param name="update">설치할 업데이트 파일의 전체 경로</param>
+    /// <param name="token">토큰</param>
     /// <returns>종료 코드</returns>
-    protected abstract int InstallSingle(Update update);
+    protected abstract Task<int> InstallSingleAsync(Update update, CancellationToken token);
 
     protected virtual void Dispose(bool disposing) {
         if (!disposedValue) {
