@@ -9,7 +9,9 @@ public sealed partial class Progress {
     private static readonly bool isWin7orGreater = Environment.OSVersion.Version >= new Version(6, 1);
     private static bool systemShutdown;
     private readonly UpdateWorker linkedWorker;
+#pragma warning disable CS0618 // 형식 또는 멤버는 사용되지 않습니다.
     private readonly CancellationTokenSource cancellation;
+#pragma warning restore CS0618 // 형식 또는 멤버는 사용되지 않습니다.
     private Task? workerTask;
 
     public Progress(IEnumerable<string> updates) {

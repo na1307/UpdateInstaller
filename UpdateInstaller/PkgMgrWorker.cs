@@ -11,7 +11,7 @@ public sealed class PkgMgrWorker : UpdateWorker {
         DirectoryInfo sandboxDirectory = Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("temp"), update.Name));
 
         // PkgMgr 매개 변수
-        pkgMgrStartInfo.Arguments = $"/ip /m:\"{update.UpdatePath}\" /s:\"{sandboxDirectory.FullName}\" /quiet /norestart";
+        pkgMgrStartInfo.Arguments = $"/ip /m:\"{update.FullPath}\" /s:\"{sandboxDirectory.FullName}\" /quiet /norestart";
 
         using Process pkgMgr = new() { StartInfo = pkgMgrStartInfo };
 

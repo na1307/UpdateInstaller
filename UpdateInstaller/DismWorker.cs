@@ -11,7 +11,7 @@ public sealed class DismWorker : UpdateWorker {
         DirectoryInfo sandboxDirectory = Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("temp"), update.Name));
 
         // Dism 매개 변수
-        dismStartInfo.Arguments = $"/online /add-package /packagepath:\"{update.UpdatePath}\" /scratchdir:\"{sandboxDirectory.FullName}\" /quiet /norestart";
+        dismStartInfo.Arguments = $"/online /add-package /packagepath:\"{update.FullPath}\" /scratchdir:\"{sandboxDirectory.FullName}\" /quiet /norestart";
 
         using Process dism = new() { StartInfo = dismStartInfo };
 

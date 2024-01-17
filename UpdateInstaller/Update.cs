@@ -1,12 +1,23 @@
 ﻿namespace UpdateInstaller;
 
-public record Update(string UpdatePath, string Description) {
+public sealed record class Update {
     private const string unknownDesc = "(불명)";
 
-    public Update(string updatePath) : this(updatePath, unknownDesc) { }
+    public Update(string fullPath) : this(fullPath, unknownDesc) { }
 
-    public string Name => Path.GetFileNameWithoutExtension(UpdatePath);
+    public Update(string fullPath, string description) {
+        if (!File.Exists(fullPath)) {
+            throw new FileNotFoundException("업데이트 파일이 존재하지 않습니다.", fullPath);
+        }
 
-    public virtual bool Equals(Update? other) => other is not null && UpdatePath == other.UpdatePath;
-    public override int GetHashCode() => UpdatePath.GetHashCode();
+        FullPath = fullPath;
+        Description = description;
+    }
+
+    public string Name => Path.GetFileNameWithoutExtension(FullPath);
+    public string Description { get; }
+    public string FullPath { get; }
+
+    public bool Equals(Update? other) => other is not null && FullPath == other.FullPath;
+    public override int GetHashCode() => FullPath.GetHashCode();
 }

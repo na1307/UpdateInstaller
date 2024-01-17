@@ -45,7 +45,8 @@ public abstract class UpdateWorker : IDisposable {
 
         foreach (Update update in updates) {
             token.ThrowIfCancellationRequested();
-            InstallStarted?.Invoke(this, new(update, ++progress));
+            progress++;
+            InstallStarted?.Invoke(this, new(update, progress));
 
             var result = await InstallSingleAsync(update, token);
 
