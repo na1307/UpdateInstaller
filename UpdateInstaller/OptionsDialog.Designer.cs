@@ -43,9 +43,9 @@ partial class OptionsDialog : Dialog {
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.dismapiButton);
-            this.groupBox1.Controls.Add(this.dismButton);
             this.groupBox1.Controls.Add(this.pkgmgrButton);
+            this.groupBox1.Controls.Add(this.dismButton);
+            this.groupBox1.Controls.Add(this.dismapiButton);
             this.groupBox1.Location = new System.Drawing.Point(12, 43);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(260, 181);
@@ -78,7 +78,6 @@ partial class OptionsDialog : Dialog {
             // dismapiButton
             // 
             this.dismapiButton.AutoSize = true;
-            this.dismapiButton.Enabled = false;
             this.dismapiButton.Location = new System.Drawing.Point(6, 72);
             this.dismapiButton.Name = "dismapiButton";
             this.dismapiButton.Size = new System.Drawing.Size(75, 19);
@@ -107,7 +106,7 @@ partial class OptionsDialog : Dialog {
 
     private CheckBox autoRestartBox;
     private GroupBox groupBox1;
-    private RadioButton dismapiButton;
-    private RadioButton dismButton;
     private RadioButton pkgmgrButton;
+    private RadioButton dismButton;
+    private RadioButton dismapiButton;
 }

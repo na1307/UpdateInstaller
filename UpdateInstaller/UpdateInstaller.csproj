@@ -43,6 +43,7 @@
     <PackageReference Include="Bluehill.TaskbarMethods" Version="1.0.1" />
     <PackageReference Include="Bluehill.Features" Version="0.1.0" />
     <PackageReference Include="Bluehill.Forms" Version="0.1.1" />
+    <PackageReference Include="Microsoft.Dism" Version="3.0.0" Condition="'$(TargetFramework)' == 'net4.5'" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net2.0'">
     <Reference Include="System.Core.Net20">

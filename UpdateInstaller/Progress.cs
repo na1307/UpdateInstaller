@@ -46,7 +46,7 @@ public sealed partial class Progress {
             } else if (workerTask.IsFaulted) {
                 setProgressState(Handle, TaskbarStates.Error);
                 textBox1.AppendText("작업 중 오류가 발생했습니다.");
-                ErrMsg(workerTask.Exception.InnerException.Message);
+                ErrMsg(workerTask.Exception.InnerException is UpdateInstallerException ? workerTask.Exception.InnerException.Message : workerTask.Exception.InnerException.ToString());
             } else if (workerTask.IsCanceled) {
                 setProgressState(Handle, TaskbarStates.Error);
                 textBox1.AppendText("작업을 취소했습니다.");

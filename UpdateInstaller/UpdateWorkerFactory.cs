@@ -7,6 +7,7 @@ public static class UpdateWorkerFactory {
         return Properties.Settings.Default.UpdateWorker switch {
             PkgMgr => new PkgMgrWorker(updates, form),
             Dism => new DismWorker(updates, form),
+            DismApi => new DismApiWorker(updates, form),
             _ => throw new InvalidOperationException(),
         };
     }
