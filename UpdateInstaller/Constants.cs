@@ -1,7 +1,7 @@
 ﻿namespace UpdateInstaller;
 
 public static class Constants {
-    public const ulong BuildNumber = 30;
+    public const ulong BuildNumber = 31;
     public const string ConfigFileName = "UpdateInstaller.xml";
     public const string OSVersion = nameof(OSVersion);
     public const string SPVersion = nameof(SPVersion);
