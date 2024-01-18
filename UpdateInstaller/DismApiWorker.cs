@@ -29,7 +29,7 @@ public sealed class DismApiWorker : UpdateWorker {
 #if !NET45_OR_GREATER
         throw new NotSupportedException();
 #else
-        using DismSession session = DismApi.OpenOnlineSessionEx(new() { ThrowExceptionOnRebootRequired = false });
+        using DismSession session = await Task.Run(() => DismApi.OpenOnlineSessionEx(new() { ThrowExceptionOnRebootRequired = false }));
 
         try {
             await Task.Run(() => DismApi.AddPackage(session, update.FullPath, false, false), token);
