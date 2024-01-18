@@ -7,11 +7,14 @@ public sealed partial class Progress {
     private const string progressText = "업데이트 {0}개 중 {1}개 설치 완료 ({2}%)";
     private const short aggressiveInlining = 256;
     private static readonly bool isWin7orGreater = Environment.OSVersion.Version >= new Version(6, 1);
-    private static bool systemShutdown;
     private readonly UpdateWorker linkedWorker;
+#if NET20
 #pragma warning disable CS0618 // 형식 또는 멤버는 사용되지 않습니다.
+#endif
     private readonly CancellationTokenSource cancellation;
+#if NET20
 #pragma warning restore CS0618 // 형식 또는 멤버는 사용되지 않습니다.
+#endif
     private Task? workerTask;
 
     public Progress(IEnumerable<string> updates) {
@@ -38,7 +41,7 @@ public sealed partial class Progress {
             // Do Nothing
         }
 
-        if (!systemShutdown) {
+        if (!Status.SystemShutdown) {
             if (Status.MustRestart && Properties.Settings.Default.AutoRestart) {
                 RestartHelper.Restart();
                 Application.Exit();
@@ -62,19 +65,40 @@ public sealed partial class Progress {
         cancelButton.Enabled = false;
     }
 
-    protected override void OnFormClosing(FormClosingEventArgs e) {
+    protected override async void OnFormClosing(FormClosingEventArgs e) {
         base.OnFormClosing(e);
 
-        if (workerTask is not null && !workerTask.IsCompleted && !systemShutdown) {
-            e.Cancel = true;
+        if (workerTask is not null && !workerTask.IsCompleted) {
+            if (!Status.SystemShutdown) {
+                e.Cancel = true;
 
-            if (MessageBox.Show("정말 작업을 취소할까요?", "취소", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes) {
+                if (MessageBox.Show("정말 작업을 취소할까요?", "취소", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes) {
+                    cancel();
+                }
+            } else {
+                cancel();
+
+                if (!workerTask.IsCompleted) {
+                    while (true) {
+                        if (workerTask.IsCompleted) {
+                            e.Cancel = false;
+                            Close();
+                            break;
+                        }
+
+                        e.Cancel = true;
+                        await Task.Delay(1000);
+                    }
+                }
+            }
+        }
+
+        void cancel() {
+            if (!cancellation.IsCancellationRequested) {
                 cancellation.Cancel();
                 cancelButton.Enabled = false;
                 textBox1.AppendText("\r\n취소하는 중입니다. 잠시 기다려 주세요...");
             }
-        } else if (systemShutdown) {
-            cancellation.Cancel();
         }
     }
 
@@ -85,7 +109,7 @@ public sealed partial class Progress {
 
     protected override void WndProc(ref Message m) {
         if (m.Msg == WM_QUERYENDSESSION) {
-            systemShutdown = true;
+            Status.SystemShutdown = true;
         }
 
         base.WndProc(ref m);
