@@ -1,54 +1,29 @@
-﻿namespace UpdateInstaller;
+﻿using static UpdateInstaller.ConfigJsonFileHelper;
+
+namespace UpdateInstaller;
 
 public partial class ChooseDialog {
-    private readonly string?[] updatePaths;
-    private readonly string? clientUpdatePath;
-    private readonly string? serverUpdatePath;
-    private readonly string?[] updatePathDescriptions;
-
     public ChooseDialog() {
         InitializeComponent();
 
-        updatePaths = [
-            GetConfigValue("UpdatePath1"),
-            GetConfigValue("UpdatePath2"),
-            GetConfigValue("UpdatePath3"),
-        ];
+        radioButton1.Text = GetUpdatePath(1)!.Description;
 
-        clientUpdatePath = GetConfigValue("ClientUpdatePath");
-        serverUpdatePath = GetConfigValue("ServerUpdatePath");
+        setDescription(2, radioButton2);
+        setDescription(3, radioButton3);
 
-        updatePathDescriptions = [
-            GetConfigValue("UpdatePathDescription1"),
-            GetConfigValue("UpdatePathDescription2"),
-            GetConfigValue("UpdatePathDescription3"),
-        ];
+        static void setDescription(int index, RadioButton radioButton) {
+            UpdatePath? updatePath = GetUpdatePath(index);
 
-        radioButton1.Text = getUpdatePathDescription(1);
+            if (updatePath != null) {
+                radioButton.Text = updatePath.Description;
 
-        if (getUpdatePath(2) != null) {
-            radioButton2.Text = getUpdatePathDescription(2);
-        } else {
-            radioButton2.Visible = false;
+                if ((updatePath.Arch is not null && !updatePath.Arch.Contains(Arch)) || !Directory.Exists(updatePath.Path + "_" + Arch)) {
+                    radioButton.Enabled = false;
+                }
+            } else {
+                radioButton.Visible = false;
+            }
         }
-
-        if (getUpdatePath(3) != null) {
-            radioButton3.Text = getUpdatePathDescription(3);
-        } else {
-            radioButton3.Visible = false;
-        }
-
-        if (GetConfigValue(OSVersion) != "6.1") {
-            radioButton1.Enabled = !Winver.IsWindowsServer;
-            radioButton2.Checked = !radioButton1.Enabled;
-        }
-
-        if (GetConfigValue(OSVersion) is "6.2" or "6.3" && Arch == "x86") {
-            radioButton2.Enabled = false;
-            radioButton3.Enabled = false;
-        }
-
-        string? getUpdatePathDescription(int index) => updatePathDescriptions[index - 1];
     }
 
     protected override void OK_Button_Click(object sender, EventArgs e) {
@@ -57,11 +32,11 @@ public partial class ChooseDialog {
         string path;
 
         if (radioButton1.Checked) {
-            path = getUpdatePath(1)!;
+            path = GetUpdatePath(1)!.Path;
         } else if (radioButton2.Checked) {
-            path = getUpdatePath(2)!;
+            path = GetUpdatePath(2)!.Path;
         } else if (radioButton3.Checked) {
-            path = getUpdatePath(3)!;
+            path = GetUpdatePath(3)!.Path;
         } else {
             throw new InvalidOperationException();
         }
@@ -70,15 +45,13 @@ public partial class ChooseDialog {
         var baseUpdatePath = path + "_" + Arch;
 
         // 추가 업데이트 경로
-        var additionalUpdatePath = !Winver.IsWindowsServer ? clientUpdatePath : serverUpdatePath;
+        var additionalUpdatePath = !Winver.IsWindowsServer ? ClientUpdatePath : ServerUpdatePath;
 
         // 추가 업데이트 경로가 있으면
         if (additionalUpdatePath != null && Directory.Exists(additionalUpdatePath + "_" + Arch)) {
             additionalUpdatePath += "_" + Arch;
         }
 
-        new Progress(Directory.GetFiles(baseUpdatePath, "*.cab").Concat(additionalUpdatePath != null ? Directory.GetFiles(additionalUpdatePath, "*.cab") : Enumerable.Empty<string>()).OrderBy(s => s.Split('\\').Last(), WinApiStrLogicalComparer.Shared)).Show();
+        new Progress(Directory.GetFiles(baseUpdatePath, "*.cab").Concat(additionalUpdatePath != null ? Directory.GetFiles(additionalUpdatePath, "*.cab") : Enumerable.Empty<string>()).Select(s => new Update(s)).OrderBy(u => u.FullPath.Split('\\').Last(), WinApiStrLogicalComparer.Shared)).Show();
     }
-
-    private string? getUpdatePath(int index) => updatePaths[index - 1];
 }

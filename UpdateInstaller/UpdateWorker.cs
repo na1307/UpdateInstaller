@@ -20,8 +20,6 @@ public abstract class UpdateWorker : IDisposable {
         }
     }
 
-    protected UpdateWorker(IEnumerable<string> updates, Form form) : this(updates.Select(u => new Update(u)), form) { }
-
     ~UpdateWorker() => Dispose(disposing: false);
 
     /// <summary>

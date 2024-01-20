@@ -3,7 +3,7 @@
 namespace UpdateInstaller;
 
 public static class UpdateWorkerFactory {
-    public static UpdateWorker Create(IEnumerable<string> updates, Form form) {
+    public static UpdateWorker Create(IEnumerable<Update> updates, Form form) {
         return Properties.Settings.Default.UpdateWorker switch {
             PkgMgr => new PkgMgrWorker(updates, form),
             Dism => new DismWorker(updates, form),

@@ -19,7 +19,6 @@
     <Using Include="Bluehill" />
     <Using Include="Bluehill.ErrDialogForms" Static="true" />
     <Using Include="UpdateInstaller.Constants" Static="true" />
-    <Using Include="UpdateInstaller.ConfigFileHelper" Static="true" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
@@ -40,10 +39,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.25" />
+    <PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.26">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Bluehill.TaskbarMethods" Version="1.0.1" />
     <PackageReference Include="Bluehill.Features" Version="0.1.0" />
     <PackageReference Include="Bluehill.Forms" Version="0.1.1" />
+    <PackageReference Include="Bluehill.CompilerServices" Version="1.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Core.Net20">

@@ -1,4 +1,5 @@
-﻿using static UpdateInstaller.Properties.Settings;
+﻿using static UpdateInstaller.ConfigJsonFileHelper;
+using static UpdateInstaller.Properties.Settings;
 using static UpdateInstaller.WorkerType;
 
 namespace UpdateInstaller;
@@ -7,7 +8,7 @@ public sealed partial class OptionsDialog {
     public OptionsDialog() {
         InitializeComponent();
         autoRestartBox.Checked = Default.AutoRestart;
-        dismButton.Enabled = GetConfigValue(OSVersion) != "6.0";
+        dismButton.Enabled = OSVersion != "6.0";
         pkgmgrButton.Checked = Default.UpdateWorker == PkgMgr;
         dismButton.Checked = Default.UpdateWorker == Dism;
     }

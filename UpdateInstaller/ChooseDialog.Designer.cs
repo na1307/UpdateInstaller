@@ -54,7 +54,6 @@ partial class ChooseDialog : Dialog {
             // radioButton3
             // 
             this.radioButton3.AutoSize = true;
-            this.radioButton3.Enabled = false;
             this.radioButton3.Location = new System.Drawing.Point(12, 62);
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(91, 19);
@@ -62,13 +61,13 @@ partial class ChooseDialog : Dialog {
             this.radioButton3.Text = "description3";
             this.radioButton3.UseVisualStyleBackColor = true;
             // 
-            // Choose
+            // ChooseDialog
             // 
             this.ClientSize = new System.Drawing.Size(484, 141);
             this.Controls.Add(this.radioButton3);
             this.Controls.Add(this.radioButton2);
             this.Controls.Add(this.radioButton1);
-            this.Name = "Choose";
+            this.Name = "ChooseDialog";
             this.Controls.SetChildIndex(this.radioButton1, 0);
             this.Controls.SetChildIndex(this.radioButton2, 0);
             this.Controls.SetChildIndex(this.radioButton3, 0);
