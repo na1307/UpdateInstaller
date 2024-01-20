@@ -27,6 +27,7 @@ partial class ChooseDialog : Dialog {
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // radioButton1
@@ -61,9 +62,21 @@ partial class ChooseDialog : Dialog {
             this.radioButton3.Text = "description3";
             this.radioButton3.UseVisualStyleBackColor = true;
             // 
+            // radioButton4
+            // 
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.Location = new System.Drawing.Point(12, 87);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(91, 19);
+            this.radioButton4.TabIndex = 5;
+            this.radioButton4.TabStop = true;
+            this.radioButton4.Text = "description4";
+            this.radioButton4.UseVisualStyleBackColor = true;
+            // 
             // ChooseDialog
             // 
-            this.ClientSize = new System.Drawing.Size(484, 141);
+            this.ClientSize = new System.Drawing.Size(484, 161);
+            this.Controls.Add(this.radioButton4);
             this.Controls.Add(this.radioButton3);
             this.Controls.Add(this.radioButton2);
             this.Controls.Add(this.radioButton1);
@@ -71,6 +84,7 @@ partial class ChooseDialog : Dialog {
             this.Controls.SetChildIndex(this.radioButton1, 0);
             this.Controls.SetChildIndex(this.radioButton2, 0);
             this.Controls.SetChildIndex(this.radioButton3, 0);
+            this.Controls.SetChildIndex(this.radioButton4, 0);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -80,4 +94,5 @@ partial class ChooseDialog : Dialog {
     private RadioButton radioButton1;
     private RadioButton radioButton2;
     private RadioButton radioButton3;
+    private RadioButton radioButton4;
 }

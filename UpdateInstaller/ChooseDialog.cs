@@ -10,6 +10,7 @@ public partial class ChooseDialog {
 
         setDescription(2, radioButton2);
         setDescription(3, radioButton3);
+        setDescription(4, radioButton4);
 
         static void setDescription(int index, RadioButton radioButton) {
             UpdatePath? updatePath = GetUpdatePath(index);
@@ -37,6 +38,8 @@ public partial class ChooseDialog {
             path = GetUpdatePath(2)!.Path;
         } else if (radioButton3.Checked) {
             path = GetUpdatePath(3)!.Path;
+        } else if (radioButton4.Checked) {
+            path = GetUpdatePath(4)!.Path;
         } else {
             throw new InvalidOperationException();
         }
