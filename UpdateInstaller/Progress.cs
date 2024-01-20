@@ -17,7 +17,7 @@ public sealed partial class Progress {
 #endif
     private Task? workerTask;
 
-    public Progress(IEnumerable<string> updates) {
+    public Progress(IEnumerable<Update> updates) {
         InitializeComponent();
         Icon = Application.OpenForms[0].Icon;
         progressBar1.Maximum = updates.Count();

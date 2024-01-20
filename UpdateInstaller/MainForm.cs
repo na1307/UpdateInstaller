@@ -1,4 +1,6 @@
-﻿namespace UpdateInstaller;
+﻿using static UpdateInstaller.ConfigJsonFileHelper;
+
+namespace UpdateInstaller;
 
 public sealed partial class MainForm {
     private static readonly Lazy<MainForm> _Instance = new(() => new());
@@ -7,13 +9,13 @@ public sealed partial class MainForm {
         InitializeComponent();
         menuItem203.Text = string.Format(menuItem203.Text, AssemblyProperties.AssemblyTitle);
 
-        Text = (GetConfigValue(OSVersion) switch {
+        Text = (OSVersion switch {
             "6.0" => "Windows Vista / Server 2008",
             "6.1" => "Windows 7 / Server 2008 R2",
             "6.2" => "Windows 8 / Server 2012",
             "6.3" => "Windows 8.1 / Server 2012 R2",
             _ => throw new InvalidOperationException(),
-        }) + " Update Package " + GetConfigValue(PackageVersion);
+        }) + " Update Package " + PackageVersion;
     }
 
     public static MainForm Instance => _Instance.Value;
