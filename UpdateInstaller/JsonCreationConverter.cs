@@ -6,7 +6,7 @@ namespace UpdateInstaller;
 public abstract class JsonCreationConverter<T> : JsonConverter<T> {
     public sealed override bool CanWrite => false;
 
-    public override T? ReadJson(JsonReader reader, Type objectType, T? existingValue, bool hasExistingValue, JsonSerializer serializer) {
+    public sealed override T? ReadJson(JsonReader reader, Type objectType, T? existingValue, bool hasExistingValue, JsonSerializer serializer) {
         // Load JObject from stream
         JToken jToken = JToken.Load(reader);
 
