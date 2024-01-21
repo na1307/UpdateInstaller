@@ -11,3 +11,6 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Critical Code Smell", "S2346:Flags enumerations zero-value members should be named \"None\"", Justification = "<보류 중>", Scope = "type", Target = "~T:UpdateInstaller.RestartHelper.ShutdownReason")]
 [assembly: SuppressMessage("Major Code Smell", "S112:General or reserved exceptions should never be thrown", Justification = "<보류 중>", Scope = "member", Target = "~M:UpdateInstaller.RestartHelper.Restart")]
 [assembly: SuppressMessage("Minor Code Smell", "S101:Types should be named in PascalCase", Justification = "<보류 중>", Scope = "type", Target = "~T:UpdateInstaller.RestartHelper")]
+[assembly: SuppressMessage("Critical Code Smell", "S3218:Inner class members should not shadow outer class \"static\" or type members", Justification = "<보류 중>", Scope = "type", Target = "~T:UpdateInstaller.ConfigJsonFileHelper.DeserializedConfig")]
+[assembly: SuppressMessage("Major Code Smell", "S1144:Unused private types or members should be removed", Justification = "<보류 중>", Scope = "type", Target = "~T:UpdateInstaller.ConfigJsonFileHelper.DeserializedConfig")]
+[assembly: SuppressMessage("Minor Code Smell", "S3459:Unassigned members should be removed", Justification = "<보류 중>", Scope = "type", Target = "~T:UpdateInstaller.ConfigJsonFileHelper.DeserializedConfig")]

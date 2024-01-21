@@ -13,14 +13,10 @@ public sealed partial class PreDialog {
         setDescription(5, preEntry5);
 
         static void setDescription(int index, PreEntry entry) {
-            PreUpdate? preUpdate = GetPreUpdate(index);
+            PreUpdateItem? preUpdate = GetPreUpdate(index);
 
             if (preUpdate is not null) {
                 entry.Text = preUpdate.Description;
-
-                if (preUpdate.Arch is not null && !preUpdate.Arch.Contains(Arch)) {
-                    entry.Enabled = false;
-                }
             } else {
                 entry.Visible = false;
             }
@@ -37,6 +33,6 @@ public sealed partial class PreDialog {
             nameof(preEntry4) => GetPreUpdate(4)!,
             nameof(preEntry5) => GetPreUpdate(5)!,
             _ => throw new InvalidOperationException(),
-        }).Updates.Select(u => new Update(Path.Combine(PreUpdatePath + "_" + Arch, u + ".cab")))).Show();
+        }).Updates).Show();
     }
 }

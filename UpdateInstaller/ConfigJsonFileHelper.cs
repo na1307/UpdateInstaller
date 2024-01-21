@@ -1,21 +1,31 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace UpdateInstaller;
 
 public static class ConfigJsonFileHelper {
-    private static readonly JObject jobj = JObject.Parse(File.ReadAllText(ConfigFileName));
-    private static readonly UpdatePath[] updatePaths = jobj["UpdatePaths"]!.ToObject<UpdatePath[]>()!;
-    private static readonly PreUpdate[]? preUpdates = jobj["PreUpdates"]!.ToObject<PreUpdate[]>();
+    private static readonly string json = File.ReadAllText(ConfigFileName);
+    private static readonly JObject jobj = JObject.Parse(json);
+    private static readonly DeserializedConfig deserialized = JsonConvert.DeserializeObject<DeserializedConfig>(json)!;
+    private static readonly UpdatePathItem[] updatePathItems = JsonConvert.DeserializeObject<UpdatePathItem[]>(jobj["UpdatePaths"]!.ToString())!;
+    private static readonly PreUpdateItem[]? preUpdateItems = JsonConvert.DeserializeObject<PreUpdateItem[]>(jobj["PreUpdates"]?.ToString() ?? string.Empty, new PreUpdateItemsConverter());
 
-    public static string? OSVersion { get; } = getConfigValue(nameof(OSVersion));
-    public static string? SPVersion { get; } = getConfigValue(nameof(SPVersion));
-    public static string? PackageVersion { get; } = getConfigValue(nameof(PackageVersion));
-    public static string? ClientUpdatePath { get; } = getConfigValue(nameof(ClientUpdatePath));
-    public static string? ServerUpdatePath { get; } = getConfigValue(nameof(ServerUpdatePath));
-    public static string? PreUpdatePath { get; } = getConfigValue(nameof(PreUpdatePath));
+    public static string? OSVersion => deserialized.OSVersion;
+    public static string? SPVersion => deserialized.SPVersion;
+    public static string? PackageVersion => deserialized.PackageVersion;
+    public static string? ClientUpdatePath => deserialized.ClientUpdatePath;
+    public static string? ServerUpdatePath => deserialized.ServerUpdatePath;
+    public static string? PreUpdatePath => deserialized.PreUpdatePath;
 
-    public static UpdatePath? GetUpdatePath(int index) => updatePaths.ElementAtOrDefault(index - 1);
-    public static PreUpdate? GetPreUpdate(int index) => preUpdates?.ElementAtOrDefault(index - 1);
+    public static UpdatePathItem? GetUpdatePath(int index) => updatePathItems.ElementAtOrDefault(index - 1);
+    public static PreUpdateItem? GetPreUpdate(int index) => preUpdateItems?.ElementAtOrDefault(index - 1);
 
-    private static string? getConfigValue(string path) => jobj[path]?.ToString();
+    private sealed class DeserializedConfig {
+        public string? OSVersion { get; init; }
+        public string? SPVersion { get; init; }
+        public string? PackageVersion { get; init; }
+        public string? ClientUpdatePath { get; init; }
+        public string? ServerUpdatePath { get; init; }
+        public string? PreUpdatePath { get; init; }
+    }
 }

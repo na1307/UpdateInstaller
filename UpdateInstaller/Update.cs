@@ -1,23 +1,41 @@
-﻿namespace UpdateInstaller;
+﻿using Newtonsoft.Json;
+using System.Diagnostics.CodeAnalysis;
+
+namespace UpdateInstaller;
 
 public sealed record class Update {
     private const string unknownDesc = "(불명)";
+    private readonly string? name;
+    private readonly string fullPath = string.Empty;
 
-    public Update(string fullPath) : this(fullPath, unknownDesc) { }
+    public Update() { }
 
-    public Update(string fullPath, string description) {
-        if (!File.Exists(fullPath)) {
-            throw new FileNotFoundException("업데이트 파일이 존재하지 않습니다.", fullPath);
-        }
+    [SetsRequiredMembers]
+    public Update(string fullPath) => FullPath = fullPath;
 
-        FullPath = fullPath;
-        Description = description;
+    [AllowNull]
+    public string Name {
+        get => name ?? Path.GetFileNameWithoutExtension(FullPath);
+        init => name = value;
     }
 
-    public string Name => Path.GetFileNameWithoutExtension(FullPath);
-    public string Description { get; }
-    public string FullPath { get; }
+    public string Description { get; init; } = unknownDesc;
+
+    public required string FullPath {
+        get => fullPath;
+        init {
+            if (!File.Exists(value)) {
+                throw new FileNotFoundException("업데이트 파일이 존재하지 않습니다.", value);
+            }
+
+            fullPath = value;
+        }
+    }
+
+    public OSPlatform Platform { get; init; } = OSPlatform.Both;
+    public CpuArch Arch { get; init; } = CpuArch.All;
 
     public bool Equals(Update? other) => other is not null && FullPath == other.FullPath;
     public override int GetHashCode() => FullPath.GetHashCode();
+    public override string ToString() => Name;
 }

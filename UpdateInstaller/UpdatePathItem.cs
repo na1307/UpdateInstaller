@@ -1,7 +1,7 @@
 ﻿namespace UpdateInstaller;
 
-public sealed class UpdatePath {
+public sealed class UpdatePathItem {
     public required string Path { get; init; }
     public required string Description { get; init; }
-    public string[]? Arch { get; init; }
+    public CpuArch Arch { get; init; } = CpuArch.All;
 }

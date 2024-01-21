@@ -19,6 +19,7 @@ public sealed partial class Progress {
 
     public Progress(IEnumerable<Update> updates) {
         InitializeComponent();
+        updates = updates.Where(u => (u.Arch & Arch) != 0);
         Icon = Application.OpenForms[0].Icon;
         progressBar1.Maximum = updates.Count();
         okButton.Enabled = false;

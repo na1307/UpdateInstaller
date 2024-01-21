@@ -13,12 +13,12 @@ public partial class ChooseDialog {
         setDescription(4, radioButton4);
 
         static void setDescription(int index, RadioButton radioButton) {
-            UpdatePath? updatePath = GetUpdatePath(index);
+            UpdatePathItem? updatePath = GetUpdatePath(index);
 
             if (updatePath != null) {
                 radioButton.Text = updatePath.Description;
 
-                if ((updatePath.Arch is not null && !updatePath.Arch.Contains(Arch)) || !Directory.Exists(updatePath.Path + "_" + Arch)) {
+                if ((updatePath.Arch != CpuArch.All && ((updatePath.Arch & Arch) == 0)) || !Directory.Exists(updatePath.Path + "_" + Arch)) {
                     radioButton.Enabled = false;
                 }
             } else {
@@ -55,6 +55,9 @@ public partial class ChooseDialog {
             additionalUpdatePath += "_" + Arch;
         }
 
-        new Progress(Directory.GetFiles(baseUpdatePath, "*.cab").Concat(additionalUpdatePath != null ? Directory.GetFiles(additionalUpdatePath, "*.cab") : Enumerable.Empty<string>()).Select(s => new Update(s)).OrderBy(u => u.FullPath.Split('\\').Last(), WinApiStrLogicalComparer.Shared)).Show();
+        IEnumerable<Update> @base = Directory.GetFiles(baseUpdatePath, "*.cab").Select(f => new Update(f));
+        IEnumerable<Update> add = additionalUpdatePath != null ? Directory.GetFiles(additionalUpdatePath, "*.cab").Select(f => new Update(f)) : Enumerable.Empty<Update>();
+
+        new Progress(@base.Concat(add).OrderBy(u => u.FullPath.Split('\\').Last(), WinApiStrLogicalComparer.Shared)).Show();
     }
 }
