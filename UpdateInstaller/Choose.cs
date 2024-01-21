@@ -38,13 +38,10 @@ public partial class Choose {
             radioButton3.Visible = false;
         }
 
-        if (GetConfigValue(OSVersion) != "6.1") {
+        if (GetConfigValue(OSVersion) == "6.0") {
             radioButton1.Enabled = !Winver.IsWindowsServer;
             radioButton2.Checked = !radioButton1.Enabled;
-        }
-
-        if (GetConfigValue(OSVersion) is "6.2" or "6.3" && Arch == "x86") {
-            radioButton2.Enabled = false;
+        } else {
             radioButton3.Enabled = false;
         }
 

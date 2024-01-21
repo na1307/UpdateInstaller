@@ -54,7 +54,6 @@ partial class Choose : Dialog {
             // radioButton3
             // 
             this.radioButton3.AutoSize = true;
-            this.radioButton3.Enabled = false;
             this.radioButton3.Location = new System.Drawing.Point(12, 62);
             this.radioButton3.Name = "radioButton3";
             this.radioButton3.Size = new System.Drawing.Size(91, 19);
