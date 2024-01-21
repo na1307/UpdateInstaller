@@ -48,7 +48,7 @@ public partial class ChooseDialog {
         var baseUpdatePath = path + "_" + Arch;
 
         // 추가 업데이트 경로
-        var additionalUpdatePath = !Winver.IsWindowsServer ? ClientUpdatePath : ServerUpdatePath;
+        var additionalUpdatePath = Platform == OSPlatform.Client ? ClientUpdatePath : ServerUpdatePath;
 
         // 추가 업데이트 경로가 있으면
         if (additionalUpdatePath != null && Directory.Exists(additionalUpdatePath + "_" + Arch)) {
