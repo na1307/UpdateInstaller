@@ -28,17 +28,13 @@ internal static class Program {
         try {
             // 구성 파일이 없으면 예외 던지기
             if (!File.Exists(ConfigFileName)) throw new UpdateInstallerException("구성 파일을 찾을 수 없습니다.");
-
-            // 필수 구성이 없으면 예외 던지기
-            string?[] strings = [OSVersion, SPVersion, PackageVersion];
-            if (strings.Contains(null)) throw new UpdateInstallerException($"구성 파일에 \"{strings.First()}\" 항목이 없습니다.");
 #if !DEBUG
 
             // 커널이나 서비스 팩 버전이 다름
-            if (OSVersion != Environment.OSVersion.Version.ToString(2) || SPVersion != Winver.SPLevel.ToString()) throw new UpdateInstallerException("패키지와 현재 운영 체제가 호환되지 않습니다.");
+            if (new Version(OSVersion.ToString("F1")) != new Version(Environment.OSVersion.Version.Major, Environment.OSVersion.Version.Minor) || SPVersion != Winver.SPLevel) throw new UpdateInstallerException("패키지와 현재 운영 체제가 호환되지 않습니다.");
 #endif
 
-            if (OSVersion == "6.0" && Settings.Default.UpdateWorker != WorkerType.PkgMgr) Settings.Default.UpdateWorker = WorkerType.PkgMgr;
+            if (OSVersion == Vista && Settings.Default.UpdateWorker != WorkerType.PkgMgr) Settings.Default.UpdateWorker = WorkerType.PkgMgr;
 
             using Mutex uiMutex = new(true, "Global\\eadb0d97-ce09-49e5-a17f-11acdb02323a", out var isCreated);
 

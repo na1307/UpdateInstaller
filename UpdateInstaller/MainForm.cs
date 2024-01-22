@@ -10,12 +10,12 @@ public sealed partial class MainForm {
         menuItem203.Text = string.Format(menuItem203.Text, AssemblyProperties.AssemblyTitle);
 
         Text = (OSVersion switch {
-            "6.0" => "Windows Vista / Server 2008",
-            "6.1" => "Windows 7 / Server 2008 R2",
-            "6.2" => "Windows 8 / Server 2012",
-            "6.3" => "Windows 8.1 / Server 2012 R2",
+            Vista => "Windows Vista / Server 2008",
+            Seven => "Windows 7 / Server 2008 R2",
+            Eight => "Windows 8 / Server 2012",
+            Blue => "Windows 8.1 / Server 2012 R2",
             _ => throw new InvalidOperationException(),
-        }) + " Update Package " + PackageVersion;
+        }) + " Update Package " + PackageVersion.ToString("F1");
     }
 
     public static MainForm Instance => _Instance.Value;

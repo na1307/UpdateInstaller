@@ -7,9 +7,13 @@ namespace UpdateInstaller;
 public sealed partial class OptionsDialog {
     public OptionsDialog() {
         InitializeComponent();
-        if (Environment.OSVersion.Version < new Version(6, 2)) dismapiButton.Enabled = false;
         autoRestartBox.Checked = Default.AutoRestart;
-        dismButton.Enabled = OSVersion != "6.0";
+        dismButton.Enabled = OSVersion > Vista;
+
+        if (OSVersion < Eight) {
+            dismapiButton.Enabled = false;
+        }
+
         pkgmgrButton.Checked = Default.UpdateWorker == PkgMgr;
         dismButton.Checked = Default.UpdateWorker == Dism;
         dismapiButton.Checked = Default.UpdateWorker == DismApi;
@@ -18,9 +22,15 @@ public sealed partial class OptionsDialog {
     protected override void OK_Button_Click(object sender, EventArgs e) {
         base.OK_Button_Click(sender, e);
         Default.AutoRestart = autoRestartBox.Checked;
-        if (pkgmgrButton.Checked) Default.UpdateWorker = PkgMgr;
-        if (dismButton.Checked) Default.UpdateWorker = Dism;
-        if (dismapiButton.Checked) Default.UpdateWorker = DismApi;
+
+        if (pkgmgrButton.Checked) {
+            Default.UpdateWorker = PkgMgr;
+        } else if (dismButton.Checked) {
+            Default.UpdateWorker = Dism;
+        } else if (dismapiButton.Checked) {
+            Default.UpdateWorker = DismApi;
+        }
+
         Default.Save();
     }
 }
