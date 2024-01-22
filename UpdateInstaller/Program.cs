@@ -28,6 +28,9 @@ internal static class Program {
         try {
             // 구성 파일이 없으면 예외 던지기
             if (!File.Exists(ConfigFileName)) throw new UpdateInstallerException("구성 파일을 찾을 수 없습니다.");
+
+            // 구성 파일이 스키마와 일치하지 않음
+            if (!IsConfigJsonValid) throw new UpdateInstallerException("구성 파일이 올바르지 않습니다.");
 #if !DEBUG
 
             // 커널이나 서비스 팩 버전이 다름

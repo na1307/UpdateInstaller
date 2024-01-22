@@ -8,13 +8,7 @@ public sealed partial class Progress {
     private const short aggressiveInlining = 256;
     private static readonly bool isWin7orGreater = Environment.OSVersion.Version >= new Version(6, 1);
     private readonly UpdateWorker linkedWorker;
-#if NET20
-#pragma warning disable CS0618 // 형식 또는 멤버는 사용되지 않습니다.
-#endif
     private readonly CancellationTokenSource cancellation;
-#if NET20
-#pragma warning restore CS0618 // 형식 또는 멤버는 사용되지 않습니다.
-#endif
     private Task? workerTask;
 
     public Progress(IEnumerable<Update> updates) {

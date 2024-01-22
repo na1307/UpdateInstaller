@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
+using System.Reflection;
 
 namespace UpdateInstaller;
 
@@ -16,6 +18,15 @@ public static class ConfigJsonFileHelper {
     public static string? ClientUpdatePath => deserialized.ClientUpdatePath;
     public static string? ServerUpdatePath => deserialized.ServerUpdatePath;
     public static string? PreUpdatePath => deserialized.PreUpdatePath;
+
+    public static bool IsConfigJsonValid {
+        get {
+            using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("UpdateInstaller.UpdateInstaller.schema.json");
+            using StreamReader reader = new StreamReader(stream);
+
+            return jobj.IsValid(JsonSchema.Parse(reader.ReadToEnd()));
+        }
+    }
 
     public static UpdatePathItem? GetUpdatePath(int index) => updatePathItems.ElementAtOrDefault(index - 1);
     public static PreUpdateItem? GetPreUpdate(int index) => preUpdateItems?.ElementAtOrDefault(index - 1);

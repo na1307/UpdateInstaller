@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "description": "UpdateInstaller",
+  "type": "object",
+  "required": true,
+  "properties": {
+    "OSVersion": {
+      "type": "number",
+      "required": true
+    },
+    "SPVersion": {
+      "type": "integer",
+      "required": true
+    },
+    "PackageVersion": {
+      "type": "number",
+      "required": true
+    },
+    "UpdatePaths": {
+      "type": "array",
+      "required": true,
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": true,
+        "properties": {
+          "Path": {
+            "type": "string",
+            "required": true
+          },
+          "Description": {
+            "type": "string",
+            "required": true
+          },
+          "Arch": {
+            "type": "string",
+            "required": false
+          }
+        }
+      }
+    },
+    "PreUpdatePath": {
+      "type": "string",
+      "required": false
+    },
+    "PreUpdates": {
+      "type": "array",
+      "required": false,
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": true,
+        "properties": {
+          "Updates": {
+            "type": "array",
+            "required": true,
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "object",
+              "required": true,
+              "properties": {
+                "File": {
+                  "type": "string",
+                  "required": true
+                },
+                "Name": {
+                  "type": "string",
+                  "required": false
+                },
+                "Arch": {
+                  "type": "string",
+                  "required": false
+                },
+                "Platform": {
+                  "type": "string",
+                  "required": false
+                }
+              }
+            }
+          },
+          "Description": {
+            "type": "string",
+            "required": true
+          }
+        }
+      }
+    }
+  }
+}
