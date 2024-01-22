@@ -90,8 +90,4 @@ public sealed partial class MainForm {
     private void menuItem203_Click(object sender, EventArgs e) {
         new UIAboutBox().ShowDialog();
     }
-
-    private void button4_Click(object sender, EventArgs e) {
-        if (new OptionalDialog().ShowDialog() == DialogResult.OK) Hide();
-    }
 }
