@@ -5,24 +5,26 @@ namespace UpdateInstaller;
 public partial class ChooseDialog {
     public ChooseDialog() {
         InitializeComponent();
-
-        radioButton1.Text = GetUpdatePath(1)!.Description;
-
-        setDescription(2, radioButton2);
-        setDescription(3, radioButton3);
         setDescription(4, radioButton4);
+        setDescription(3, radioButton3);
+        setDescription(2, radioButton2);
+        setDescription(1, radioButton1);
 
         static void setDescription(int index, RadioButton radioButton) {
             UpdatePathItem? updatePath = GetUpdatePath(index);
 
-            if (updatePath != null) {
+            if (updatePath != null && Directory.Exists(updatePath.Path + "_" + Arch)) {
                 radioButton.Text = updatePath.Description;
 
-                if ((updatePath.Arch != CpuArch.All && ((updatePath.Arch & Arch) == 0)) || !Directory.Exists(updatePath.Path + "_" + Arch)) {
+                if ((updatePath.Arch != CpuArch.All && ((updatePath.Arch & Arch) == 0)) || (updatePath.Platform != OSPlatform.Both && ((updatePath.Platform & Platform) == 0))) {
                     radioButton.Enabled = false;
+                    radioButton.Checked = false;
+                } else {
+                    radioButton.Checked = true;
                 }
             } else {
                 radioButton.Visible = false;
+                radioButton.Checked = false;
             }
         }
     }
@@ -44,19 +46,17 @@ public partial class ChooseDialog {
             throw new InvalidOperationException();
         }
 
-        // 기본 업데이트 경로
-        var baseUpdatePath = path + "_" + Arch;
+        // 업데이트들
+        IEnumerable<Update> @base = Directory.GetFiles(path + "_" + Arch, "*.cab").Select(f => new Update(f));
+        IEnumerable<Update> add = Enumerable.Empty<Update>();
 
-        // 추가 업데이트 경로
         var additionalUpdatePath = Platform == OSPlatform.Client ? ClientUpdatePath : ServerUpdatePath;
 
         // 추가 업데이트 경로가 있으면
-        if (additionalUpdatePath != null && Directory.Exists(additionalUpdatePath + "_" + Arch)) {
+        if (!string.IsNullOrEmpty(additionalUpdatePath) && Directory.Exists(additionalUpdatePath + "_" + Arch)) {
             additionalUpdatePath += "_" + Arch;
+            add = Directory.GetFiles(additionalUpdatePath, "*.cab").Select(f => new Update(f));
         }
-
-        IEnumerable<Update> @base = Directory.GetFiles(baseUpdatePath, "*.cab").Select(f => new Update(f));
-        IEnumerable<Update> add = additionalUpdatePath != null ? Directory.GetFiles(additionalUpdatePath, "*.cab").Select(f => new Update(f)) : Enumerable.Empty<Update>();
 
         new Progress(@base.Concat(add).OrderBy(u => u.FullPath.Split('\\').Last(), WinApiStrLogicalComparer.Shared)).Show();
     }
