@@ -7,8 +7,8 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <UseWindowsForms>true</UseWindowsForms>
     <AssemblyVersion>1</AssemblyVersion>
-    <FileVersion>1.3.0</FileVersion>
-    <Version>1.3-alpha</Version>
+    <FileVersion>1.4.0</FileVersion>
+    <Version>1.4-alpha</Version>
     <Description>Windows Update CAB 파일 자동 설치 도구</Description>
   </PropertyGroup>
   <ItemGroup>

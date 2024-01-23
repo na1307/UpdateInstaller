@@ -29,6 +29,7 @@ partial class MainForm : Form {
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
             this.menuItem000 = new System.Windows.Forms.MenuItem();
             this.menuItem001 = new System.Windows.Forms.MenuItem();
@@ -38,7 +39,6 @@ partial class MainForm : Form {
             this.menuItem201 = new System.Windows.Forms.MenuItem();
             this.menuItem202 = new System.Windows.Forms.MenuItem();
             this.menuItem203 = new System.Windows.Forms.MenuItem();
-            this.button4 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -63,13 +63,23 @@ partial class MainForm : Form {
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(12, 99);
+            this.button3.Location = new System.Drawing.Point(170, 68);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(310, 25);
+            this.button3.Size = new System.Drawing.Size(152, 25);
             this.button3.TabIndex = 2;
-            this.button3.Text = "찾아보기";
+            this.button3.Text = "선택적 업데이트";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(12, 99);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(310, 25);
+            this.button4.TabIndex = 3;
+            this.button4.Text = "찾아보기";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // mainMenu1
             // 
@@ -130,16 +140,6 @@ partial class MainForm : Form {
             this.menuItem203.Text = "{0} 정보(&A)";
             this.menuItem203.Click += new System.EventHandler(this.menuItem203_Click);
             // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(170, 68);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(152, 25);
-            this.button4.TabIndex = 3;
-            this.button4.Text = "선택적 업데이트";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -164,6 +164,7 @@ partial class MainForm : Form {
     private Button button1;
     private Button button2;
     private Button button3;
+    private Button button4;
     private MainMenu mainMenu1;
     private MenuItem menuItem000;
     private MenuItem menuItem001;
@@ -173,5 +174,4 @@ partial class MainForm : Form {
     private MenuItem menuItem201;
     private MenuItem menuItem202;
     private MenuItem menuItem203;
-    private Button button4;
 }
