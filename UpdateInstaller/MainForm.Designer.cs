@@ -38,6 +38,7 @@ partial class MainForm : Form {
             this.menuItem201 = new System.Windows.Forms.MenuItem();
             this.menuItem202 = new System.Windows.Forms.MenuItem();
             this.menuItem203 = new System.Windows.Forms.MenuItem();
+            this.button4 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -54,7 +55,7 @@ partial class MainForm : Form {
             // 
             this.button2.Location = new System.Drawing.Point(12, 68);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(310, 25);
+            this.button2.Size = new System.Drawing.Size(152, 25);
             this.button2.TabIndex = 1;
             this.button2.Text = "사전 업데이트";
             this.button2.UseVisualStyleBackColor = true;
@@ -129,10 +130,21 @@ partial class MainForm : Form {
             this.menuItem203.Text = "{0} 정보(&A)";
             this.menuItem203.Click += new System.EventHandler(this.menuItem203_Click);
             // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(170, 68);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(152, 25);
+            this.button4.TabIndex = 3;
+            this.button4.Text = "선택적 업데이트";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(334, 130);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
@@ -161,4 +173,5 @@ partial class MainForm : Form {
     private MenuItem menuItem201;
     private MenuItem menuItem202;
     private MenuItem menuItem203;
+    private Button button4;
 }
