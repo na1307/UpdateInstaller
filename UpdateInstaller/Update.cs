@@ -34,7 +34,7 @@ public record class Update {
     public OSPlatform Platform { get; init; } = OSPlatform.Both;
     public CpuArch Arch { get; init; } = CpuArch.All;
 
-    public virtual bool Equals(Update? other) => other is not null && EqualityContract == other.EqualityContract && FullPath == other.FullPath && Platform == other.Platform && Arch == other.Arch;
+    public virtual bool Equals(Update? other) => other is not null && EqualityContract.Equals(other.EqualityContract) && FullPath == other.FullPath && Platform == other.Platform && Arch == other.Arch;
     public override int GetHashCode() => FullPath.GetHashCode() ^ Platform.GetHashCode() ^ Arch.GetHashCode();
     public sealed override string ToString() => Name;
 }

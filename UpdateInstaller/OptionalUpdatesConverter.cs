@@ -16,7 +16,7 @@ public sealed class OptionalUpdatesConverter : JsonCreationConverter<OptionalUpd
                 arch = CpuArch.All;
             }
 
-            if ((arch & Arch) == 0) {
+            if (((arch & Arch) == 0) || ((platform & Platform) == 0)) {
                 continue;
             }
 

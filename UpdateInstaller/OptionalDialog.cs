@@ -1,7 +1,7 @@
 ﻿namespace UpdateInstaller;
 
 public partial class OptionalDialog {
-    private readonly OptionalUpdate[] updates = ConfigJsonFileHelper.OptionalUpdates.Select(ou => ou with { Checked = false }).ToArray();
+    private readonly OptionalUpdate[] updates = ConfigJsonFileHelper.OptionalUpdates?.Select(ou => ou with { Checked = false }).ToArray() ?? [];
 
     public OptionalDialog() {
         InitializeComponent();

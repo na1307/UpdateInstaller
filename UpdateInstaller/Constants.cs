@@ -1,7 +1,7 @@
 ﻿namespace UpdateInstaller;
 
 public static class Constants {
-    public const ulong BuildNumber = 101;
+    public const ulong BuildNumber = 102;
     public const string ConfigFileName = "UpdateInstaller.json";
     public const double Vista = 6.0;
     public const double Seven = 6.1;
