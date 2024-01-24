@@ -56,6 +56,10 @@
       "type": "string",
       "required": false
     },
+    "OptionalUpdatePath": {
+      "type": "string",
+      "required": false
+    },
     "PreUpdates": {
       "type": "array",
       "required": false,
@@ -82,11 +86,11 @@
                   "type": "string",
                   "required": false
                 },
-                "Arch": {
+                "Platform": {
                   "type": "string",
                   "required": false
                 },
-                "Platform": {
+                "Arch": {
                   "type": "string",
                   "required": false
                 }
@@ -96,6 +100,34 @@
           "Description": {
             "type": "string",
             "required": true
+          }
+        }
+      }
+    },
+    "OptionalUpdates": {
+      "type": "array",
+      "required": false,
+      "minitems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": true,
+        "properties": {
+          "File": {
+            "type": "string",
+            "required": true
+          },
+          "Description": {
+            "type": "string",
+            "required": true
+          },
+          "Platform": {
+            "type": "string",
+            "required": false
+          },
+          "Arch": {
+            "type": "string",
+            "required": false
           }
         }
       }

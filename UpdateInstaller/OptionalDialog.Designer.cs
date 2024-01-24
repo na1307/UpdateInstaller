@@ -25,17 +25,52 @@ partial class OptionalDialog : Dialog {
     /// </summary>
     private void InitializeComponent() {
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.columnCheck = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.columnName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.columnDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // dataGridView1
             // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.columnCheck,
+            this.columnName,
+            this.columnDescription});
             this.dataGridView1.Location = new System.Drawing.Point(12, 12);
             this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 23;
+            this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.dataGridView1.Size = new System.Drawing.Size(710, 412);
             this.dataGridView1.TabIndex = 1;
+            // 
+            // columnCheck
+            // 
+            this.columnCheck.DataPropertyName = "Checked";
+            this.columnCheck.HeaderText = "선택";
+            this.columnCheck.Name = "columnCheck";
+            this.columnCheck.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.columnCheck.Width = 40;
+            // 
+            // columnName
+            // 
+            this.columnName.DataPropertyName = "Name";
+            this.columnName.HeaderText = "이름";
+            this.columnName.Name = "columnName";
+            this.columnName.ReadOnly = true;
+            this.columnName.Width = 80;
+            // 
+            // columnDescription
+            // 
+            this.columnDescription.DataPropertyName = "Description";
+            this.columnDescription.HeaderText = "설명";
+            this.columnDescription.Name = "columnDescription";
+            this.columnDescription.ReadOnly = true;
+            this.columnDescription.Width = 580;
             // 
             // OptionalDialog
             // 
@@ -54,4 +89,7 @@ partial class OptionalDialog : Dialog {
     #endregion
 
     private DataGridView dataGridView1;
+    private DataGridViewCheckBoxColumn columnCheck;
+    private DataGridViewTextBoxColumn columnName;
+    private DataGridViewTextBoxColumn columnDescription;
 }

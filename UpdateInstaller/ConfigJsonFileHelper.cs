@@ -18,6 +18,8 @@ public static class ConfigJsonFileHelper {
     public static string? ClientUpdatePath => deserialized.ClientUpdatePath;
     public static string? ServerUpdatePath => deserialized.ServerUpdatePath;
     public static string? PreUpdatePath => deserialized.PreUpdatePath;
+    public static string? OptionalUpdatePath => deserialized.OptionalUpdatePath;
+    public static OptionalUpdate[]? OptionalUpdates { get; } = JsonConvert.DeserializeObject<OptionalUpdate[]>(jobj[nameof(OptionalUpdates)]?.ToString() ?? string.Empty, new OptionalUpdatesConverter());
 
     public static bool IsConfigJsonValid {
         get {
@@ -38,5 +40,6 @@ public static class ConfigJsonFileHelper {
         public string? ClientUpdatePath { get; init; }
         public string? ServerUpdatePath { get; init; }
         public string? PreUpdatePath { get; init; }
+        public string? OptionalUpdatePath { get; init; }
     }
 }
