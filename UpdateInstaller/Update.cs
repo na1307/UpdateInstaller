@@ -31,8 +31,8 @@ public sealed record class Update {
         }
     }
 
-    public OSPlatform Platform { get; init; } = OSPlatform.Both;
     public CpuArch Arch { get; init; } = CpuArch.All;
+    public OSPlatform Platform { get; init; } = OSPlatform.Both;
 
     public bool Equals(Update? other) => other is not null && FullPath == other.FullPath;
     public override int GetHashCode() => FullPath.GetHashCode();
