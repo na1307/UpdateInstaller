@@ -44,6 +44,14 @@
         }
       }
     },
+    "ClientUpdatePath": {
+      "type": "string",
+      "required": false
+    },
+    "ServerUpdatePath": {
+      "type": "string",
+      "required": false
+    },
     "PreUpdatePath": {
       "type": "string",
       "required": false
