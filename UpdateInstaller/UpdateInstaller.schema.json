@@ -82,11 +82,11 @@
                   "type": "string",
                   "required": false
                 },
-                "Platform": {
+                "Arch": {
                   "type": "string",
                   "required": false
                 },
-                "Arch": {
+                "Platform": {
                   "type": "string",
                   "required": false
                 }
