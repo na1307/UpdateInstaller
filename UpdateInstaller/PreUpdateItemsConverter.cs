@@ -9,19 +9,18 @@ public sealed class PreUpdateItemsConverter : JsonCreationConverter<PreUpdateIte
         List<Update> updates = [];
 
         foreach (var item in array.Cast<JObject>()) {
-            if (!EnumHelpers.TryParse(item["Platform"]?.ToString(), out OSPlatform platform)) {
-                platform = OSPlatform.Both;
-            }
-
             if (!EnumHelpers.TryParse(item["Arch"]?.ToString(), out CpuArch arch)) {
                 arch = CpuArch.All;
             }
 
+            if (!EnumHelpers.TryParse(item["Platform"]?.ToString(), out OSPlatform platform)) {
+                platform = OSPlatform.Both;
+            }
             updates.Add(new() {
                 FullPath = Path.Combine(ConfigJsonFileHelper.PreUpdatePath + "_" + Arch.ToString(), item["File"]!.ToString() + ".cab"),
                 Name = (item["Name"]?.ToString()),
-                Platform = platform,
                 Arch = arch,
+                Platform = platform,
             });
         }
 

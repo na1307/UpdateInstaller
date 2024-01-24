@@ -31,10 +31,10 @@ public record class Update {
         }
     }
 
-    public OSPlatform Platform { get; init; } = OSPlatform.Both;
     public CpuArch Arch { get; init; } = CpuArch.All;
+    public OSPlatform Platform { get; init; } = OSPlatform.Both;
 
-    public virtual bool Equals(Update? other) => other is not null && EqualityContract.Equals(other.EqualityContract) && FullPath == other.FullPath && Platform == other.Platform && Arch == other.Arch;
-    public override int GetHashCode() => FullPath.GetHashCode() ^ Platform.GetHashCode() ^ Arch.GetHashCode();
+    public virtual bool Equals(Update? other) => other is not null && EqualityContract.Equals(other.EqualityContract) && FullPath == other.FullPath && Arch == other.Arch && Platform == other.Platform;
+    public override int GetHashCode() => FullPath.GetHashCode() ^ Arch.GetHashCode() ^ Platform.GetHashCode();
     public sealed override string ToString() => Name;
 }

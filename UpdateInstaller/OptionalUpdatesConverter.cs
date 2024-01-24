@@ -8,12 +8,12 @@ public sealed class OptionalUpdatesConverter : JsonCreationConverter<OptionalUpd
         List<OptionalUpdate> updates = [];
 
         foreach (var item in jToken.Cast<JObject>()) {
-            if (!EnumHelpers.TryParse(item["Platform"]?.ToString(), out OSPlatform platform)) {
-                platform = OSPlatform.Both;
-            }
-
             if (!EnumHelpers.TryParse(item["Arch"]?.ToString(), out CpuArch arch)) {
                 arch = CpuArch.All;
+            }
+
+            if (!EnumHelpers.TryParse(item["Platform"]?.ToString(), out OSPlatform platform)) {
+                platform = OSPlatform.Both;
             }
 
             if (((arch & Arch) == 0) || ((platform & Platform) == 0)) {
@@ -28,8 +28,8 @@ public sealed class OptionalUpdatesConverter : JsonCreationConverter<OptionalUpd
                     _ => throw new InvalidOperationException(platform.ToString())
                 }), item["File"]!.ToString() + ".cab"),
                 Description = item["Description"]!.ToString(),
+                Arch = arch,
                 Platform = platform,
-                Arch = arch
             });
         }
 

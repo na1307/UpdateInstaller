@@ -33,11 +33,11 @@
             "type": "string",
             "required": true
           },
-          "Platform": {
+          "Arch": {
             "type": "string",
             "required": false
           },
-          "Arch": {
+          "Platform": {
             "type": "string",
             "required": false
           }
@@ -86,11 +86,11 @@
                   "type": "string",
                   "required": false
                 },
-                "Platform": {
+                "Arch": {
                   "type": "string",
                   "required": false
                 },
-                "Arch": {
+                "Platform": {
                   "type": "string",
                   "required": false
                 }
@@ -121,11 +121,11 @@
             "type": "string",
             "required": true
           },
-          "Platform": {
+          "Arch": {
             "type": "string",
             "required": false
           },
-          "Arch": {
+          "Platform": {
             "type": "string",
             "required": false
           }
