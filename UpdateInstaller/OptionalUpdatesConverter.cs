@@ -27,7 +27,8 @@ public sealed class OptionalUpdatesConverter : JsonCreationConverter<OptionalUpd
                     OSPlatform.Both => string.Empty,
                     _ => throw new InvalidOperationException(platform.ToString())
                 }), item["File"]!.ToString() + ".cab"),
-                Description = item["Description"]!.ToString(),
+                Name = item["Name"]?.ToString(),
+                Description = item["Description"]?.ToString(),
                 Arch = arch,
                 Platform = platform,
             });

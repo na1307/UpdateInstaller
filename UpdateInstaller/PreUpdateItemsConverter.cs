@@ -16,6 +16,7 @@ public sealed class PreUpdateItemsConverter : JsonCreationConverter<PreUpdateIte
             if (!EnumHelpers.TryParse(item["Platform"]?.ToString(), out OSPlatform platform)) {
                 platform = OSPlatform.Both;
             }
+
             updates.Add(new() {
                 FullPath = Path.Combine(ConfigJsonFileHelper.PreUpdatePath + "_" + Arch.ToString(), item["File"]!.ToString() + ".cab"),
                 Name = (item["Name"]?.ToString()),

@@ -117,9 +117,13 @@
             "type": "string",
             "required": true
           },
+          "Name": {
+            "type": "string",
+            "required": false
+          },
           "Description": {
             "type": "string",
-            "required": true
+            "required": false
           },
           "Arch": {
             "type": "string",

@@ -3,7 +3,6 @@
 namespace UpdateInstaller;
 
 public record class Update {
-    private const string unknownDesc = "(불명)";
     private readonly string? name;
     private readonly string fullPath = string.Empty;
 
@@ -17,8 +16,6 @@ public record class Update {
         get => name ?? Path.GetFileNameWithoutExtension(FullPath);
         init => name = value;
     }
-
-    public string Description { get; init; } = unknownDesc;
 
     public required string FullPath {
         get => fullPath;
