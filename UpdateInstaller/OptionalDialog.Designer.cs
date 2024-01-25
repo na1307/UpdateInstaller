@@ -62,19 +62,23 @@ partial class OptionalDialog : Dialog {
             // 
             // columnName
             // 
+            this.columnName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.columnName.DataPropertyName = "Name";
             this.columnName.HeaderText = "이름";
+            this.columnName.MinimumWidth = 75;
             this.columnName.Name = "columnName";
             this.columnName.ReadOnly = true;
-            this.columnName.Width = 80;
+            this.columnName.Width = 75;
             // 
             // columnDescription
             // 
+            this.columnDescription.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.columnDescription.DataPropertyName = "Description";
             this.columnDescription.HeaderText = "설명";
+            this.columnDescription.MinimumWidth = 575;
             this.columnDescription.Name = "columnDescription";
             this.columnDescription.ReadOnly = true;
-            this.columnDescription.Width = 560;
+            this.columnDescription.Width = 575;
             // 
             // OptionalDialog
             // 

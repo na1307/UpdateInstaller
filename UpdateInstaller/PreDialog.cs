@@ -5,6 +5,7 @@ namespace UpdateInstaller;
 public sealed partial class PreDialog {
     public PreDialog() {
         InitializeComponent();
+        Opacity = 0;
         HideOKButton();
         setDescription(1, preEntry1);
         setDescription(2, preEntry2);
@@ -20,6 +21,17 @@ public sealed partial class PreDialog {
             } else {
                 entry.Visible = false;
             }
+        }
+    }
+
+    protected override void OnLoad(EventArgs e) {
+        base.OnLoad(e);
+
+        if (GetPreUpdate(1) == null) {
+            BeginInvoke(Close);
+            MessageBox.Show("사전 업데이트가 없습니다.", "사전 업데이트 설치", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        } else {
+            Opacity = 1;
         }
     }
 
