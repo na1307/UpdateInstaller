@@ -1,9 +1,7 @@
 ﻿namespace UpdateInstaller;
 
-public sealed class PkgMgrWorker : UpdateWorker {
+public sealed class PkgMgrWorker(IEnumerable<Update> updates, Form form) : UpdateWorker(updates, form) {
     private readonly ProcessStartInfo pkgMgrStartInfo = new() { FileName = "pkgmgr.exe", UseShellExecute = true, WindowStyle = ProcessWindowStyle.Hidden };
-
-    public PkgMgrWorker(IEnumerable<Update> updates, Form form) : base(updates, form) { }
 
     protected override async Task<int> InstallSingleAsync(Update update, CancellationToken token) {
         // 임시 디렉토리 생성

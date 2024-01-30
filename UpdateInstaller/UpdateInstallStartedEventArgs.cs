@@ -1,11 +1,6 @@
 ﻿namespace UpdateInstaller;
 
-public sealed class UpdateInstallStartedEventArgs : EventArgs {
-    public UpdateInstallStartedEventArgs(Update update, int count) {
-        Update = update;
-        Count = count;
-    }
-
-    public Update Update { get; }
-    public int Count { get; }
+public sealed class UpdateInstallStartedEventArgs(Update update, int count) : EventArgs {
+    public Update Update { get; } = update;
+    public int Count { get; } = count;
 }

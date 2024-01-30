@@ -7,8 +7,8 @@ namespace UpdateInstaller;
 public sealed class DismApiWorker : UpdateWorker {
 #if NET45_OR_GREATER
     private bool disposedValue;
-#endif
 
+#endif
     public DismApiWorker(IEnumerable<Update> updates, Form form) : base(updates, form) {
 #if !NET45_OR_GREATER
         throw new NotSupportedException();
@@ -18,14 +18,14 @@ public sealed class DismApiWorker : UpdateWorker {
     }
 
     protected override
-#if !NET20
+#if NET45_OR_GREATER
         async
 #endif
         Task<int> InstallSingleAsync(Update update, CancellationToken token) {
 #if !NET45_OR_GREATER
         throw new NotSupportedException();
 #else
-        using DismSession session = await Task.Run(() => DismApi.OpenOnlineSessionEx(new() { ThrowExceptionOnRebootRequired = false }));
+        using DismSession session = await Task.Run(() => DismApi.OpenOnlineSessionEx(new DismSessionOptions { ThrowExceptionOnRebootRequired = false }));
 
         try {
             await Task.Run(() => DismApi.AddPackage(session, update.FullPath, false, false), token);

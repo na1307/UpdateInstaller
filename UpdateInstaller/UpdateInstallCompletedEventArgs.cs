@@ -1,11 +1,6 @@
 ﻿namespace UpdateInstaller;
 
-public sealed class UpdateInstallCompletedEventArgs : EventArgs {
-    public UpdateInstallCompletedEventArgs(int progress, int result) {
-        Progress = progress;
-        Result = result;
-    }
-
-    public int Progress { get; }
-    public int Result { get; }
+public sealed class UpdateInstallCompletedEventArgs(int progress, int result) : EventArgs {
+    public int Progress { get; } = progress;
+    public int Result { get; } = result;
 }

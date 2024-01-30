@@ -1,9 +1,7 @@
 ﻿namespace UpdateInstaller;
 
-public sealed class DismWorker : UpdateWorker {
+public sealed class DismWorker(IEnumerable<Update> updates, Form form) : UpdateWorker(updates, form) {
     private readonly ProcessStartInfo dismStartInfo = new() { FileName = "dism.exe", UseShellExecute = true, WindowStyle = ProcessWindowStyle.Hidden };
-
-    public DismWorker(IEnumerable<Update> updates, Form form) : base(updates, form) { }
 
     protected override async Task<int> InstallSingleAsync(Update update, CancellationToken token) {
         // 임시 디렉토리 생성
