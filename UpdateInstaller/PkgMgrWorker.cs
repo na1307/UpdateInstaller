@@ -5,7 +5,7 @@ public sealed class PkgMgrWorker(IEnumerable<Update> updates, Form form) : Updat
 
     protected override async Task<int> InstallSingleAsync(Update update, CancellationToken token) {
         // 임시 디렉토리 생성
-        DirectoryInfo sandboxDirectory = Directory.CreateDirectory(Path.Combine(Environment.GetEnvironmentVariable("temp"), update.Name));
+        DirectoryInfo sandboxDirectory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), update.Name));
 
         // PkgMgr 매개 변수
         pkgMgrStartInfo.Arguments = $"/ip /m:\"{update.FullPath}\" /s:\"{sandboxDirectory.FullName}\" /quiet /norestart";

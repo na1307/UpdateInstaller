@@ -1,4 +1,5 @@
-﻿using static UpdateInstaller.ConfigJsonFileHelper;
+﻿using System.Runtime.CompilerServices;
+using static UpdateInstaller.ConfigJsonFileHelper;
 
 namespace UpdateInstaller;
 
@@ -11,7 +12,7 @@ public partial class ChooseDialog {
         setDescription(1, radioButton1);
 
         static void setDescription(int index, RadioButton radioButton) {
-            UpdatePathItem? updatePath = GetUpdatePath(index);
+            UpdatePathItem? updatePath = getUpdatePath(index);
 
             if (updatePath != null && Directory.Exists(updatePath.Path + "_" + Arch)) {
                 radioButton.Text = updatePath.Description;
@@ -35,13 +36,13 @@ public partial class ChooseDialog {
         string path;
 
         if (radioButton1.Checked) {
-            path = GetUpdatePath(1)!.Path;
+            path = getUpdatePath(1)!.Path;
         } else if (radioButton2.Checked) {
-            path = GetUpdatePath(2)!.Path;
+            path = getUpdatePath(2)!.Path;
         } else if (radioButton3.Checked) {
-            path = GetUpdatePath(3)!.Path;
+            path = getUpdatePath(3)!.Path;
         } else if (radioButton4.Checked) {
-            path = GetUpdatePath(4)!.Path;
+            path = getUpdatePath(4)!.Path;
         } else {
             throw new InvalidOperationException();
         }
@@ -60,4 +61,7 @@ public partial class ChooseDialog {
 
         new Progress(@base.Concat(add).OrderBy(u => u.FullPath.Split('\\').Last(), WinApiStrLogicalComparer.Shared)).Show();
     }
+
+    [MethodImpl(AggressiveInlining)]
+    private static UpdatePathItem? getUpdatePath(int index) => UpdatePaths.ElementAtOrDefault(index);
 }

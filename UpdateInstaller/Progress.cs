@@ -5,7 +5,6 @@ namespace UpdateInstaller;
 
 public sealed partial class Progress {
     private const string progressText = "업데이트 {0}개 중 {1}개 설치 완료 ({2}%)";
-    private const short aggressiveInlining = 256;
     private static readonly bool isWin7orGreater = Environment.OSVersion.Version >= new Version(6, 1);
     private readonly UpdateWorker linkedWorker;
     private readonly CancellationTokenSource cancellation;
@@ -110,14 +109,14 @@ public sealed partial class Progress {
         base.WndProc(ref m);
     }
 
-    [MethodImpl(aggressiveInlining)]
+    [MethodImpl(AggressiveInlining)]
     private static void setProgressState(IntPtr windowHandle, TaskbarStates taskbarState) {
         if (isWin7orGreater) {
             Win7TaskbarMethods.SetProgressState(windowHandle, taskbarState);
         }
     }
 
-    [MethodImpl(aggressiveInlining)]
+    [MethodImpl(AggressiveInlining)]
     private static void setProgressValue(IntPtr windowHandle, int progressValue, int progressMax) {
         if (isWin7orGreater) {
             Win7TaskbarMethods.SetProgressValue(windowHandle, progressValue, progressMax);

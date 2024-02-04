@@ -9,8 +9,6 @@ public static class ConfigJsonFileHelper {
     private static readonly string json = File.ReadAllText(ConfigFileName);
     private static readonly JObject jobj = JObject.Parse(json);
     private static readonly DeserializedConfig deserialized = JsonConvert.DeserializeObject<DeserializedConfig>(json)!;
-    private static readonly UpdatePathItem[] updatePathItems = JsonConvert.DeserializeObject<UpdatePathItem[]>(jobj["UpdatePaths"]!.ToString())!;
-    private static readonly PreUpdateItem[]? preUpdateItems = JsonConvert.DeserializeObject<PreUpdateItem[]>(jobj["PreUpdates"]?.ToString() ?? string.Empty, new PreUpdateItemsConverter());
 
     public static double OSVersion => deserialized.OSVersion;
     public static int SPVersion => deserialized.SPVersion;
@@ -19,6 +17,8 @@ public static class ConfigJsonFileHelper {
     public static string? ServerUpdatePath => deserialized.ServerUpdatePath;
     public static string? PreUpdatePath => deserialized.PreUpdatePath;
     public static string? OptionalUpdatePath => deserialized.OptionalUpdatePath;
+    public static UpdatePathItem[] UpdatePaths { get; } = JsonConvert.DeserializeObject<UpdatePathItem[]>(jobj[nameof(UpdatePaths)]!.ToString())!;
+    public static PreUpdateItem[]? PreUpdates { get; } = JsonConvert.DeserializeObject<PreUpdateItem[]>(jobj[nameof(PreUpdates)]?.ToString() ?? string.Empty, new PreUpdateItemsConverter());
     public static OptionalUpdate[]? OptionalUpdates { get; } = JsonConvert.DeserializeObject<OptionalUpdate[]>(jobj[nameof(OptionalUpdates)]?.ToString() ?? string.Empty, new OptionalUpdatesConverter());
 
     public static bool IsConfigJsonValid {
@@ -29,9 +29,6 @@ public static class ConfigJsonFileHelper {
             return jobj.IsValid(JsonSchema.Parse(reader.ReadToEnd()));
         }
     }
-
-    public static UpdatePathItem? GetUpdatePath(int index) => updatePathItems.ElementAtOrDefault(index - 1);
-    public static PreUpdateItem? GetPreUpdate(int index) => preUpdateItems?.ElementAtOrDefault(index - 1);
 
     private sealed class DeserializedConfig {
         public double OSVersion { get; init; }

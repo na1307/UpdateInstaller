@@ -1,4 +1,5 @@
-﻿using static UpdateInstaller.ConfigJsonFileHelper;
+﻿using System.Runtime.CompilerServices;
+using static UpdateInstaller.ConfigJsonFileHelper;
 
 namespace UpdateInstaller;
 
@@ -14,7 +15,7 @@ public sealed partial class PreDialog {
         setDescription(5, preEntry5);
 
         static void setDescription(int index, PreEntry entry) {
-            PreUpdateItem? preUpdate = GetPreUpdate(index);
+            PreUpdateItem? preUpdate = getPreUpdate(index);
 
             if (preUpdate is not null) {
                 entry.Text = preUpdate.Description;
@@ -27,7 +28,7 @@ public sealed partial class PreDialog {
     protected override void OnLoad(EventArgs e) {
         base.OnLoad(e);
 
-        if (GetPreUpdate(1) == null) {
+        if (getPreUpdate(1) == null) {
             BeginInvoke(Close);
             MessageBox.Show("사전 업데이트가 없습니다.", "사전 업데이트 설치", MessageBoxButtons.OK, MessageBoxIcon.Information);
         } else {
@@ -39,12 +40,15 @@ public sealed partial class PreDialog {
         OK_Button_Click(sender, e);
 
         new Progress((((PreEntry)sender).Name switch {
-            nameof(preEntry1) => GetPreUpdate(1)!,
-            nameof(preEntry2) => GetPreUpdate(2)!,
-            nameof(preEntry3) => GetPreUpdate(3)!,
-            nameof(preEntry4) => GetPreUpdate(4)!,
-            nameof(preEntry5) => GetPreUpdate(5)!,
+            nameof(preEntry1) => getPreUpdate(1)!,
+            nameof(preEntry2) => getPreUpdate(2)!,
+            nameof(preEntry3) => getPreUpdate(3)!,
+            nameof(preEntry4) => getPreUpdate(4)!,
+            nameof(preEntry5) => getPreUpdate(5)!,
             _ => throw new InvalidOperationException(),
         }).Updates).Show();
     }
+
+    [MethodImpl(AggressiveInlining)]
+    private static PreUpdateItem? getPreUpdate(int index) => PreUpdates?.ElementAtOrDefault(index);
 }
