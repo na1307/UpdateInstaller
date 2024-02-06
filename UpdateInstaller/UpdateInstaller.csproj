@@ -47,7 +47,7 @@
     <PackageReference Include="Bluehill.Forms" Version="0.1.2" />
     <PackageReference Include="Bluehill.CompilerServices" Version="1.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Microsoft.Dism" Version="3.0.0" Condition="'$(TargetFramework)' == 'net4.5'" />
+    <PackageReference Include="Microsoft.Dism" Version="3.1.0" Condition="'$(TargetFramework)' == 'net4.5'" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net2.0'">
     <Reference Include="System.Core.Net20">
