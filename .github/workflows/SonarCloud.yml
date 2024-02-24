@@ -8,6 +8,8 @@ jobs:
   build:
     name: SonarCloud
     runs-on: windows-latest
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
     steps:
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -36,6 +38,12 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}\.nuget\packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }} #hash of project files
+          restore-keys: ${{ runner.os }}-nuget-
       - name: MSBuild
         uses: microsoft/setup-msbuild@v2
         with:
