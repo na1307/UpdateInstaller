@@ -1,11 +1,11 @@
 ﻿namespace UpdateInstaller;
 
-public sealed class DismWorker(IEnumerable<Update> updates, Form form) : UpdateWorker(updates, form) {
+public sealed class DismWorker(IEnumerable<Update> updates) : UpdateWorker(updates) {
     private readonly ProcessStartInfo dismStartInfo = new() { FileName = "dism.exe", UseShellExecute = true, WindowStyle = ProcessWindowStyle.Hidden };
 
     protected override async Task<int> InstallSingleAsync(Update update, CancellationToken token) {
         // 임시 디렉토리 생성
-        DirectoryInfo sandboxDirectory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), update.Name));
+        var sandboxDirectory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), update.Name));
 
         // Dism 매개 변수
         dismStartInfo.Arguments = $"/online /add-package /packagepath:\"{update.FullPath}\" /scratchdir:\"{sandboxDirectory.FullName}\" /quiet /norestart";

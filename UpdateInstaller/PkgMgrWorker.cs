@@ -1,11 +1,11 @@
 ﻿namespace UpdateInstaller;
 
-public sealed class PkgMgrWorker(IEnumerable<Update> updates, Form form) : UpdateWorker(updates, form) {
+public sealed class PkgMgrWorker(IEnumerable<Update> updates) : UpdateWorker(updates) {
     private readonly ProcessStartInfo pkgMgrStartInfo = new() { FileName = "pkgmgr.exe", UseShellExecute = true, WindowStyle = ProcessWindowStyle.Hidden };
 
     protected override async Task<int> InstallSingleAsync(Update update, CancellationToken token) {
         // 임시 디렉토리 생성
-        DirectoryInfo sandboxDirectory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), update.Name));
+        var sandboxDirectory = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), update.Name));
 
         // PkgMgr 매개 변수
         pkgMgrStartInfo.Arguments = $"/ip /m:\"{update.FullPath}\" /s:\"{sandboxDirectory.FullName}\" /quiet /norestart";

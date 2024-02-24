@@ -3,11 +3,11 @@
 namespace UpdateInstaller;
 
 public static class UpdateWorkerFactory {
-    public static UpdateWorker Create(IEnumerable<Update> updates, Form form) {
+    public static UpdateWorker Create(IEnumerable<Update> updates) {
         return Properties.Settings.Default.UpdateWorker switch {
-            PkgMgr => new PkgMgrWorker(updates, form),
-            Dism => new DismWorker(updates, form),
-            DismApi => new DismApiWorker(updates, form),
+            PkgMgr => new PkgMgrWorker(updates),
+            Dism => new DismWorker(updates),
+            DismApi => new DismApiWorker(updates),
             _ => throw new InvalidOperationException(),
         };
     }

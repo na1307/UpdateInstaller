@@ -9,7 +9,7 @@ public sealed class DismApiWorker : UpdateWorker {
     private bool disposedValue;
 
 #endif
-    public DismApiWorker(IEnumerable<Update> updates, Form form) : base(updates, form) {
+    public DismApiWorker(IEnumerable<Update> updates) : base(updates) {
 #if !NET45_OR_GREATER
         throw new NotSupportedException();
 #else
@@ -25,7 +25,7 @@ public sealed class DismApiWorker : UpdateWorker {
 #if !NET45_OR_GREATER
         throw new NotSupportedException();
 #else
-        using DismSession session = await Task.Run(() => DismApi.OpenOnlineSessionEx(new DismSessionOptions { ThrowExceptionOnRebootRequired = false }));
+        using var session = await Task.Run(() => DismApi.OpenOnlineSessionEx(new DismSessionOptions { ThrowExceptionOnRebootRequired = false }));
 
         try {
             await Task.Run(() => DismApi.AddPackage(session, update.FullPath, false, false), token);

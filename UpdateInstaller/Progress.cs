@@ -1,5 +1,6 @@
 ﻿using Bluehill.TaskbarMethods;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace UpdateInstaller;
 
@@ -18,13 +19,17 @@ public sealed partial class Progress {
         okButton.Enabled = false;
         label1.Text = string.Format(progressText, progressBar1.Maximum, 0, 0);
         cancellation = new();
-        linkedWorker = UpdateWorkerFactory.Create(updates, this);
+        linkedWorker = UpdateWorkerFactory.Create(updates);
         linkedWorker.InstallStarted += linkedWorker_InstallStarted;
         linkedWorker.InstallCompleted += linkedWorker_InstallCompleted;
     }
 
     protected override async void OnShown(EventArgs e) {
         base.OnShown(e);
+
+        if (!ShutdownBlockReasonCreate(Handle, "업데이트 설치 작업을 진행 중입니다.")) {
+            throw new UpdateInstallerException("ShutdownBlockReasonCreate failed: " + Marshal.GetLastWin32Error().ToString("X"));
+        }
 
         setProgressState(Handle, TaskbarStates.Normal);
         workerTask = linkedWorker.WorkAsync(cancellation.Token);
@@ -33,6 +38,10 @@ public sealed partial class Progress {
             await workerTask;
         } catch {
             // Do Nothing
+        }
+
+        if (!ShutdownBlockReasonDestroy(Handle)) {
+            throw new UpdateInstallerException("ShutdownBlockReasonDestroy failed: " + Marshal.GetLastWin32Error().ToString("X"));
         }
 
         if (!Status.SystemShutdown) {
@@ -108,6 +117,14 @@ public sealed partial class Progress {
 
         base.WndProc(ref m);
     }
+
+    [DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool ShutdownBlockReasonCreate(IntPtr hWnd, [MarshalAs(UnmanagedType.LPWStr)] string pwszReason);
+
+    [DllImport("user32.dll", ExactSpelling = true, SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool ShutdownBlockReasonDestroy(IntPtr hWnd);
 
     [MethodImpl(AggressiveInlining)]
     private static void setProgressState(IntPtr windowHandle, TaskbarStates taskbarState) {

@@ -5,22 +5,8 @@ namespace UpdateInstaller;
 /// <summary>
 /// 업데이트 작업기
 /// </summary>
-public abstract class UpdateWorker : IDisposable {
-    private readonly IEnumerable<Update> updates;
-    private readonly IntPtr hWnd;
+public abstract class UpdateWorker(IEnumerable<Update> updates) : IDisposable {
     private int progress;
-    private bool disposedValue;
-
-    protected UpdateWorker(IEnumerable<Update> updates, Form form) {
-        this.updates = updates;
-        hWnd = form.Handle;
-
-        if (!ShutdownBlockReasonCreate(hWnd, "업데이트 설치 작업을 진행 중입니다.")) {
-            throw new UpdateInstallerException("ShutdownBlockReasonCreate failed: " + Marshal.GetLastWin32Error().ToString("X"));
-        }
-    }
-
-    ~UpdateWorker() => Dispose(disposing: false);
 
     /// <summary>
     /// 한 업데이트 파일의 설치를 시작할 때 발생
@@ -41,14 +27,14 @@ public abstract class UpdateWorker : IDisposable {
     public async Task WorkAsync(CancellationToken token) {
         List<string> failedList = [];
 
-        foreach (Update update in updates) {
+        foreach (var update in updates) {
             token.ThrowIfCancellationRequested();
             progress++;
-            InstallStarted?.Invoke(this, new(update, progress));
+            InstallStarted?.Invoke(this, new UpdateInstallStartedEventArgs(update, progress));
 
             var result = await InstallSingleAsync(update, token);
 
-            InstallCompleted?.Invoke(this, new(progress, result));
+            InstallCompleted?.Invoke(this, new UpdateInstallCompletedEventArgs(progress, result));
 
             switch (result) {
                 case 0:
@@ -66,7 +52,9 @@ public abstract class UpdateWorker : IDisposable {
 
         var failedString = failedList.ToJoinedString(", ");
 
-        if (!string.IsNullOrEmpty(failedString)) throw new UpdateInstallerException(failedString + " 업데이트 설치를 실패했습니다.");
+        if (!string.IsNullOrEmpty(failedString)) {
+            throw new UpdateInstallerException(failedString + " 업데이트 설치를 실패했습니다.");
+        }
     }
 
     public void Dispose() {
@@ -82,19 +70,7 @@ public abstract class UpdateWorker : IDisposable {
     /// <returns>종료 코드</returns>
     protected abstract Task<int> InstallSingleAsync(Update update, CancellationToken token);
 
-    protected virtual void Dispose(bool disposing) {
-        if (!disposedValue) {
-            if (disposing) {
-                // 관리형 개체 없음
-            }
-
-            if (!ShutdownBlockReasonDestroy(hWnd)) {
-                throw new UpdateInstallerException("ShutdownBlockReasonDestroy failed: " + Marshal.GetLastWin32Error().ToString("X"));
-            }
-
-            disposedValue = true;
-        }
-    }
+    protected virtual void Dispose(bool disposing) { }
 
     [DllImport("user32.dll", CharSet = CharSet.Unicode, ExactSpelling = true, SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
