@@ -15,7 +15,7 @@ public sealed partial class PreDialog {
         setDescription(5, preEntry5);
 
         static void setDescription(int index, PreEntry entry) {
-            PreUpdateItem? preUpdate = getPreUpdate(index);
+            var preUpdate = getPreUpdate(index - 1);
 
             if (preUpdate is not null) {
                 entry.Text = preUpdate.Description;

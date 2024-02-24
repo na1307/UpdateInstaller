@@ -12,7 +12,7 @@ public partial class ChooseDialog {
         setDescription(1, radioButton1);
 
         static void setDescription(int index, RadioButton radioButton) {
-            UpdatePathItem? updatePath = getUpdatePath(index);
+            var updatePath = getUpdatePath(index - 1);
 
             if (updatePath != null && Directory.Exists(updatePath.Path + "_" + Arch)) {
                 radioButton.Text = updatePath.Description;
@@ -48,8 +48,8 @@ public partial class ChooseDialog {
         }
 
         // 업데이트들
-        IEnumerable<Update> @base = Directory.GetFiles(path + "_" + Arch, "*.cab").Select(f => new Update(f));
-        IEnumerable<Update> add = Enumerable.Empty<Update>();
+        var @base = Directory.GetFiles(path + "_" + Arch, "*.cab").Select(f => new Update(f));
+        var add = Enumerable.Empty<Update>();
 
         var additionalUpdatePath = Platform == OSPlatform.Client ? ClientUpdatePath : ServerUpdatePath;
 
