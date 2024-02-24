@@ -15,7 +15,7 @@ public sealed partial class PreDialog {
         setDescription(5, preEntry5);
 
         static void setDescription(int index, PreEntry entry) {
-            var preUpdate = getPreUpdate(index - 1);
+            var preUpdate = getPreUpdate(index);
 
             if (preUpdate is not null) {
                 entry.Text = preUpdate.Description;
@@ -50,5 +50,5 @@ public sealed partial class PreDialog {
     }
 
     [MethodImpl(AggressiveInlining)]
-    private static PreUpdateItem? getPreUpdate(int index) => PreUpdates?.ElementAtOrDefault(index);
+    private static PreUpdateItem? getPreUpdate(int index) => PreUpdates?.ElementAtOrDefault(index - 1);
 }

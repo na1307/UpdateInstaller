@@ -12,7 +12,7 @@ public partial class ChooseDialog {
         setDescription(1, radioButton1);
 
         static void setDescription(int index, RadioButton radioButton) {
-            var updatePath = getUpdatePath(index - 1);
+            var updatePath = getUpdatePath(index);
 
             if (updatePath != null && Directory.Exists(updatePath.Path + "_" + Arch)) {
                 radioButton.Text = updatePath.Description;
@@ -63,5 +63,5 @@ public partial class ChooseDialog {
     }
 
     [MethodImpl(AggressiveInlining)]
-    private static UpdatePathItem? getUpdatePath(int index) => UpdatePaths.ElementAtOrDefault(index);
+    private static UpdatePathItem? getUpdatePath(int index) => UpdatePaths.ElementAtOrDefault(index - 1);
 }
