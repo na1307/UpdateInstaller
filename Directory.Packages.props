@@ -3,6 +3,6 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <GlobalPackageReference Include="Bluehill.Imports" Version="1.0.1" />
+    <GlobalPackageReference Include="Bluehill.Imports" Version="1.0.2" />
   </ItemGroup>
 </Project>
