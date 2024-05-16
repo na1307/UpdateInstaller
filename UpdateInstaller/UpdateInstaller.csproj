@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net20</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>program.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AssemblyVersion>1</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+    <Version>1.0-alpha</Version>
+    <Description>Windows Update CAB 파일 자동 설치 도구</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <Using Remove="System.Linq" />
+    <Using Remove="System.Threading.Tasks" />
+  </ItemGroup>
+</Project>
